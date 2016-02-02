@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+
+    <path>oil.ac</path>
+
+    
+    <animation>
+        <type>material</type>
+        <object-name>Face</object-name>
+        <object-name>OilTempNeedle</object-name>
+        <object-name>OilPressNeedle</object-name>
+  <emission>
+   <red>1.0</red>
+   <green>0.8</green>
+   <blue>0.4</blue>
+   <factor-prop>/systems/electrical/outputs/instrument-lights-norm</factor-prop>
+  </emission>
+    </animation>
+    
+    
+
+    <animation>
+  <type>rotate</type>
+  <object-name>OilTempNeedle</object-name>
+  <property>engines/engine/oil-temperature-degf</property>
+  <interpolation>
+   <entry><ind>  0.0</ind><dep>0 </dep></entry>     
+   <entry><ind>75</ind><dep> -7.07 </dep></entry>     
+   <entry><ind> 100</ind><dep> -28.84 </dep></entry>     
+   <entry><ind> 150</ind><dep>  -48.31</dep></entry>     
+   <entry><ind> 200</ind><dep>  -90.22 </dep></entry>     
+   <entry><ind> 245</ind><dep> -129.824 </dep></entry> 
+   <entry><ind> 260</ind><dep> -140.00 </dep></entry>     
+  </interpolation>
+  <axis>
+   <x>-1</x>
+   <y>0</y>
+   <z>0</z>
+  </axis>
+    <center>
+      <x-m> 0.001 </x-m>
+      <y-m> -0.015 </y-m>
+      <z-m> -0 </z-m>
+    </center>
+ </animation>
+    
+   <animation>
+        <type>rotate</type>
+        <object-name>OilPressNeedle</object-name>
+  <property>engines/engine/oil-pressure-psi</property>
+ <interpolation>
+      <entry><ind>0</ind><dep> 0</dep></entry>
+      <entry><ind>20</ind><dep>19.63</dep></entry>
+      <entry><ind>40</ind><dep>39.25 </dep></entry>
+      <entry><ind>60</ind><dep>58.33</dep></entry>
+      <entry><ind>100</ind><dep>97.91 </dep></entry>
+      <entry><ind>115</ind><dep>117.29</dep></entry>
+    </interpolation>
+    <axis>
+      <x> -1 </x>
+      <y>  0 </y>
+      <z>  0 </z>
+    </axis>
+    <center>
+      <x-m> 0.001 </x-m>
+      <y-m> 0.015 </y-m>
+      <z-m> -0 </z-m>
+    </center>
+    </animation>
+
+   
+
+</PropertyList>

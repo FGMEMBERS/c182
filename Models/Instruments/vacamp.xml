@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+
+    <path>vacamp.ac</path>
+    
+    
+    <animation>
+        <type>material</type>
+        <object-name>Face</object-name>
+        <object-name>VacNeedle</object-name>
+        <object-name>AmpNeedle</object-name>
+  <emission>
+   <red>1.0</red>
+   <green>0.8</green>
+   <blue>0.4</blue>
+   <factor-prop>/systems/electrical/outputs/instrument-lights-norm</factor-prop>
+  </emission>
+    </animation>
+    
+    
+
+    <animation>
+  <type>rotate</type>
+  <object-name>VacNeedle</object-name>
+  <property>systems/vacuum/suction-inhg</property>
+  <interpolation>
+   <entry><ind>  0.0</ind><dep>0 </dep></entry>     
+   <entry><ind> 3.0</ind><dep> -9.10 </dep></entry>     
+   <entry><ind> 4.0</ind><dep> -40 </dep></entry>     
+   <entry><ind> 5.0</ind><dep>  -72</dep></entry>     
+   <entry><ind> 6.0</ind><dep>  -104.6 </dep></entry>     
+   <entry><ind> 7.00</ind><dep> -136 </dep></entry>     
+  </interpolation>
+  <axis>
+   <x>-1</x>
+   <y>0</y>
+   <z>0</z>
+  </axis>
+    <center>
+      <x-m> 0.001 </x-m>
+      <y-m> -0.015 </y-m>
+      <z-m> -0 </z-m>
+    </center>
+ </animation>
+    
+   <animation>
+        <type>rotate</type>
+        <object-name>AmpNeedle</object-name>
+        <property>systems/electrical/amps</property>
+ <interpolation>
+      <entry><ind>60</ind><dep> 61.80</dep></entry>
+      <entry><ind>45</ind><dep>45.18</dep></entry>
+      <entry><ind>30</ind><dep>29.37 </dep></entry>
+      <entry><ind>15</ind><dep>14.24 </dep></entry>
+      <entry><ind>0</ind><dep>0 </dep></entry>
+      <entry><ind>-15</ind><dep>-14.24</dep></entry>
+      <entry><ind>-30</ind><dep>-29.37</dep></entry>
+      <entry><ind>-45</ind><dep>-45.18</dep></entry>
+      <entry><ind>-60</ind><dep>-61.80</dep></entry>
+    </interpolation>
+    <axis>
+      <x> -1 </x>
+      <y>  0 </y>
+      <z>  0 </z>
+    </axis>
+    <center>
+      <x-m> 0.001 </x-m>
+      <y-m> 0.015 </y-m>
+      <z-m> -0 </z-m>
+    </center>
+    </animation>
+
+   
+
+</PropertyList>

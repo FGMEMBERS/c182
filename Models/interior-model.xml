@@ -498,10 +498,13 @@
   </animation>
   <!--Controls-->
  <!-- Parking Brake -->
+    <params>
+        <brake-lever>/sim/model/c182/cockpit/brake-lever</brake-lever>
+    </params>
     <animation>
         <type>translate</type>
         <object-name>ParkingBrake</object-name>
-        <property>/controls/gear//brake-parking</property>
+        <property alias="/params/brake-lever"/>
         <factor>0.04</factor>
         <axis>
             <x>1.0</x>
@@ -512,7 +515,7 @@
     <animation>
         <type>rotate</type>
         <object-name>ParkingBrake</object-name>
-        <property>/controls/gear//brake-parking</property>
+        <property alias="/params/brake-lever"/>
         <factor>90</factor>
         <axis>
             <x>1.0</x>
@@ -837,7 +840,7 @@
                 <dep>0.022</dep>
             </entry>
             <entry>
-                <ind>0.25315</ind>
+                <ind>0.26315</ind>
                 <dep>0.0150</dep>
             </entry>
             <entry>
@@ -871,7 +874,7 @@
                 <dep>-30</dep>
             </entry>
             <entry>
-                <ind>0.25315</ind>
+                <ind>0.26315</ind>
                 <dep>-15</dep>
             </entry>
             <entry>
@@ -891,7 +894,9 @@
     <!-- ================================================================== -->
     <!-- Flaps lever                                                       -->
     <!-- ================================================================== -->
-    <animation>
+
+
+<animation>
     <type>knob</type>
       <property>controls/flight/flaps</property>
       <object-name>FlapSwitch</object-name>
@@ -927,7 +932,7 @@
     
 <animation>
  <type>translate</type>
-      <property>controls/flight/flaps</property>
+      <property>/sim/model/c182/cockpit/flaps-lever</property>
         <object-name>FlapSwitch</object-name>
        <axis>
          <x>0.0</x>
@@ -940,7 +945,7 @@
                 <dep>0.027</dep>
             </entry>
             <entry>
-                <ind>0.25315</ind>
+                <ind>0.26315</ind>
                 <dep>0.0135</dep>
             </entry>
             <entry>
@@ -956,7 +961,7 @@
       
 <animation>
         <type>rotate</type>
-      <property>controls/flight/flaps</property>
+      <property>/sim/model/c182/cockpit/flaps-lever</property>
         <object-name>FlapSwitch</object-name>
         <axis>
          <x>0.0</x>
@@ -974,7 +979,7 @@
                 <dep>-25</dep>
             </entry>
             <entry>
-                <ind>0.25315</ind>
+                <ind>0.26315</ind>
                 <dep>-13.5</dep>
             </entry>
             <entry>
@@ -994,32 +999,32 @@
 
     <animation>
         <type>translate</type>
-      <property>controls/flight/flaps</property>
+      <property>/sim/model/c182/cockpit/flaps-lever</property>
         <object-name>FlapSwitch</object-name>
         <axis>
             <x>0.0</x>
             <y>1.0</y>
             <z>0.0</z>
         </axis>
-        <interpolation>
+<interpolation>
             <entry>
                 <ind>0.0</ind>
                 <dep>-0.001</dep>
             </entry>
             <entry>
-                <ind>0.333333</ind>
+                <ind>0.26315</ind>
                 <dep>-0.001</dep>
             </entry>
             <entry>
-                <ind>0.345</ind>
+                <ind>0.26316</ind>
                 <dep>0.0015</dep>
             </entry>
             <entry>
-                <ind>0.666666</ind>
+                <ind>0.526315</ind>
                 <dep>0.0015</dep>
             </entry>
             <entry>
-                <ind>0.675</ind>
+                <ind>0.526316</ind>
                 <dep>0.0035</dep>
             </entry>
             <entry>
@@ -1095,6 +1100,123 @@
    <z-m>-0.318</z-m>
   </center>
  </animation>
+
+<!-- knobs-->
+<animation>
+    <type>knob</type>
+    <object-name>RadioLightKnob</object-name>
+    <property>/controls/lighting/radio-lights-norm</property>
+    <factor>1</factor>
+<drag-direction>vertical</drag-direction>
+    <offset-deg>0</offset-deg>
+		<center>
+			<x-m>0.387</x-m>
+			<y-m>-0.121</y-m>
+			<z-m>0.116</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/radio-lights-norm</property>
+        <factor>0.1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  
+<animation>
+    <type>knob</type>
+    <object-name>PanelLightKnob</object-name>
+    <property>/controls/lighting/instrument-lights-norm</property>
+    <factor>1</factor>
+<drag-direction>horizontal</drag-direction>
+    <offset-deg>0</offset-deg>
+		<center>
+			<x-m>0.387</x-m>
+			<y-m>-0.121</y-m>
+			<z-m>0.116</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/instrument-lights-norm</property>
+        <factor>0.1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  
+<animation>
+    <type>knob</type>
+    <object-name>GlareshieldLightKnob</object-name>
+    <property>/controls/lighting/glareshield-lights-norm</property>
+    <factor>1</factor>
+<drag-direction>vertical</drag-direction>
+    <offset-deg>0</offset-deg>
+		<center>
+			<x-m>0.371</x-m>
+			<y-m>-0.121</y-m>
+			<z-m>0.073</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/glareshield-lights-norm</property>
+        <factor>0.1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
+  
+<animation>
+    <type>knob</type>
+    <object-name>PedestalLightKnob</object-name>
+    <property>/controls/lighting/pedestal-lights-norm</property>
+    <factor>1</factor>
+<drag-direction>horizontal</drag-direction>
+    <offset-deg>0</offset-deg>
+		<center>
+			<x-m>0.371</x-m>
+			<y-m>-0.121</y-m>
+			<z-m>0.073</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+    <action>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/pedestal-lights-norm</property>
+        <factor>0.1</factor>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+  </animation>
  
 <!--switches-->
     <!-- MasterSwitch -->
@@ -1323,16 +1445,16 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-toggle</command>
-                <property>/controls/switches/master-avionics</property>
+                <property>/controls/switches/AVMBus1</property>
             </binding>
         </action>
         <hovered>
             <binding>
                 <command>set-tooltip</command>
-                <tooltip-id>MasterAvionik-Switch Bus1</tooltip-id>
-                <label>MasterAvionik: %s</label>
+                <tooltip-id>Avionics Master-Switch Bus1</tooltip-id>
+                <label>Avionics Master: %s</label>
                 <mapping>on-off</mapping>
-                <property>/controls/switches/master-avionics</property>
+                <property>/controls/switches/AVMBus1</property>
             </binding>
         </hovered>
     </animation>
@@ -1346,16 +1468,16 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-toggle</command>
-                <property>/controls/switches/master-avionics</property>
+                <property>/controls/switches/AVMBus2</property>
             </binding>
         </action>
         <hovered>
             <binding>
                 <command>set-tooltip</command>
-                <tooltip-id>MasterAvionik-Switch Bus2</tooltip-id>
-                <label>MasterAvionik: %s</label>
+                <tooltip-id>Avionics Master-Switch Bus2</tooltip-id>
+                <label>Avionics Master: %s</label>
                 <mapping>on-off</mapping>
-                <property>/controls/switches/master-avionics</property>
+                <property>/controls/switches/AVMBus2</property>
             </binding>
         </hovered>
     </animation>
@@ -1398,7 +1520,7 @@
     
     <model>
         <path>Aircraft/c182/Models/Instruments/Avionics/kx165-1.xml</path>
-        <name>kx155</name>
+        <name>kx165</name>
         <offsets>
             <x-m>0.3515</x-m>
             <y-m>0.083</y-m>
@@ -1410,7 +1532,7 @@
     
     <model>
         <path>Aircraft/c182/Models/Instruments/Avionics/kx165-2.xml</path>
-        <name>kx155</name>
+        <name>kx165</name>
         <offsets>
             <x-m>0.3515</x-m>
             <y-m>0.083</y-m>
@@ -1505,7 +1627,7 @@
     
 <model>
    <name>vor</name>
-   <path>Aircraft/Instruments-3d/vor/vor.xml</path>
+   <path>Aircraft/c182/Models/Instruments/vor/vor.xml</path>
    <offsets>
      <x-m>0.3455</x-m>
      <y-m>-0.065</y-m>
@@ -1515,7 +1637,7 @@
 
  <model>
    <name>vor2</name>
-   <path>Aircraft/Instruments-3d/vor/vor2.xml</path>
+   <path>Aircraft/c182/Models/Instruments/vor/vor2.xml</path>
    <offsets>
      <x-m>0.3455</x-m>
      <y-m>-0.065</y-m>
@@ -1563,6 +1685,57 @@
    </offsets>
  </model>
  
+ <model>
+   <name>VacAmp</name>
+   <path>Aircraft/c182/Models/Instruments/vacamp.xml</path>
+   <offsets>
+     <x-m>0.3477</x-m>
+     <y-m>-0.432</y-m>
+     <z-m>0.253</z-m>
+   </offsets>
+ </model>
+ 
+ 
+ <model>
+   <name>Oil</name>
+   <path>Aircraft/c182/Models/Instruments/oil.xml</path>
+   <offsets>
+     <x-m>0.3472</x-m>
+     <y-m>-0.497</y-m>
+     <z-m>0.2535</z-m>
+   </offsets>
+ </model>
+ 
+ <model>
+   <name>EGT</name>
+   <path>Aircraft/c182/Models/Instruments/egt.xml</path>
+   <offsets>
+     <x-m>0.3475</x-m>
+     <y-m>-0.432</y-m>
+     <z-m>0.327</z-m>
+   </offsets>
+ </model>
+ 
+ <model>
+   <name>FuelQty</name>
+   <path>Aircraft/c182/Models/Instruments/fuelqty.xml</path>
+   <offsets>
+     <x-m>0.3485</x-m>
+     <y-m>-0.497</y-m>
+     <z-m>0.327</z-m>
+   </offsets>
+ </model>
+ 
+<model>
+        <path>Aircraft/c182/Models/Instruments/Davtron803/davtron803.xml</path>
+        <name>Davtron803</name>
+        <offsets>
+            <x-m>0.352</x-m>
+            <y-m>-0.433</y-m>
+            <z-m>0.402</z-m>
+        </offsets>
+    </model>
+ 
 <!--ELT-->
  <model>
    <name>ELT</name>
@@ -1579,9 +1752,9 @@
    <name>Hobbs</name>
    <path>Aircraft/c182/Models/Instruments/hobbs/hobbs.xml</path>
    <offsets>
-     <x-m>0.3515</x-m>
-     <y-m>0.432</y-m>
-     <z-m>0.372</z-m>
+     <x-m>0.350</x-m>
+     <y-m>0.444</y-m>
+     <z-m>0.376</z-m>
    </offsets>
  </model>
     

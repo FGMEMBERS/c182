@@ -2,6 +2,10 @@
 
 <PropertyList>
 
+<airspeed-indicator>
+  <indicated-speed-kt type="double">0</indicated-speed-kt>
+</airspeed-indicator>
+
 <audio-panel>
   <test type="int">0</test>
 </audio-panel>
@@ -68,5 +72,8 @@
     <display-sel-khz type="int">50</display-sel-khz>
   </frequencies>
 </dme>
+
+
+
 
 </PropertyList>

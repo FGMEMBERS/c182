@@ -16,13 +16,13 @@
   <nasal>
    <load>
        var livery_update = aircraft.livery_update.new(
-     "Aircraft/c182/Models/Liveries", 10,
-     func { print("c182 livery update") });
+     "Aircraft/c182s/Models/Liveries", 10,
+     func { print("c182s livery update") });
    </load>
 </nasal>
 
 <effect>
-    <inherits-from>Aircraft/c182/Models/Effects/c182sreflect-uber</inherits-from>
+    <inherits-from>Aircraft/c182s/Models/Effects/c182sreflect-uber</inherits-from>
    <object-name>Fuselage</object-name><!-- model obejcts parented in Blender - gives faster livery loading-->
    <!--<object-name>Spinner</object-name>
    <object-name>WheelFairingNose</object-name>
@@ -52,7 +52,7 @@
  </effect>
  
   <effect>
-       <inherits-from>Aircraft/c182/Models/Effects/c182sreflectglas-uber</inherits-from>
+       <inherits-from>Aircraft/c182s/Models/Effects/c182sreflectglas-uber</inherits-from>
     <object-name>Windscreen</object-name>
     <object-name>Window.L</object-name>
     <object-name>Window.R</object-name>
@@ -75,7 +75,7 @@
    </effect>
    
 <effect>
-	<inherits-from>Aircraft/c182/Models/Effects/c182sreflect-uber</inherits-from>
+	<inherits-from>Aircraft/c182s/Models/Effects/c182sreflect-uber</inherits-from>
 	<parameters>
 			<reflection-correction type="float">1.0</reflection-correction>
 			<reflection-dynamic type="int">1</reflection-dynamic>
@@ -84,22 +84,27 @@
 </effect>
 
     <effect>
-        <inherits-from>Aircraft/c182/Models/Effects/c182sreflectglas_interior_front</inherits-from>
+        <inherits-from>Aircraft/c182s/Models/Effects/c182sreflectglas_interior_front</inherits-from>
         <object-name>Windscreen.Int</object-name>
     </effect>
     
     <effect>
-        <inherits-from>Aircraft/c182/Models/Effects/c182sreflectglas_interior_side</inherits-from>
+        <inherits-from>Aircraft/c182s/Models/Effects/c182sreflectglas_interior_side</inherits-from>
         <object-name>Windscreen.Side.Left</object-name>
         <object-name>Window.L.001</object-name>
     </effect>
     
         <effect>
-        <inherits-from>Aircraft/c182/Models/Effects/c182sreflectglas_interior_side</inherits-from>
+        <inherits-from>Aircraft/c182s/Models/Effects/c182sreflectglas_interior_side</inherits-from>
         <object-name>Windscreen.Side.Right</object-name>
         <object-name>Window.R.001</object-name>
     </effect>
-
+    
+<!-- ALS volume shadow  -->
+    <model>
+        <path>Effects/shadow.xml</path>
+    </model>
+    
  <animation>
    <type>material</type>
    <object-name>Fuselage</object-name><!-- grouped in Blender for faster loading of liveries-->
@@ -139,7 +144,7 @@
  <animation>
      <type>material</type>
      <object-name>Fuselage</object-name>
-<property-base>sim/model/c182/material/fuselage</property-base>
+<property-base>sim/model/c182s/material/fuselage</property-base>
       <diffuse>
 			<red-prop>diffuse/red</red-prop>
 			<green-prop>diffuse/green</green-prop>
@@ -659,7 +664,7 @@
      <repeatable>false</repeatable>
      <binding>
         <command>nasal</command>
-        <script>c182.DoorL.toggle();</script>
+        <script>c182s.DoorL.toggle();</script>
      </binding>
    </action>
    </animation>
@@ -707,7 +712,7 @@
      <repeatable>false</repeatable>
      <binding>
         <command>nasal</command>
-        <script>c182.DoorR.toggle();</script>
+        <script>c182s.DoorR.toggle();</script>
      </binding>
    </action>
   </animation>
@@ -758,7 +763,7 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>nasal</command>
-        <script>c182.WindowR.toggle();</script>
+        <script>c182s.WindowR.toggle();</script>
             </binding>
         </action>
         <hovered>
@@ -817,7 +822,7 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>nasal</command>
-        <script>c182.WindowL.toggle();</script>
+        <script>c182s.WindowL.toggle();</script>
             </binding>
         </action>
         <hovered>
@@ -861,6 +866,47 @@
 		</axis>
  </animation>
  
+    <animation>
+        <type>pick</type>
+        <object-name>LeftTank.cs</object-name>
+        <visible>false</visible>
+        <action>
+            <button>0</button>
+            <repeatable>false</repeatable>
+            <binding>
+                <command>dialog-show</command>
+                <dialog-name>c182s-left-fuel-dialog</dialog-name>
+            </binding>
+        </action>
+        <hovered>
+            <binding>
+                <command>set-tooltip</command>
+                <tooltip-id>fuel-cap-port</tooltip-id>
+                <label>Fuel Cap</label>
+            </binding>
+        </hovered>
+    </animation>
+    
+    <animation>
+        <type>pick</type>
+        <object-name>RightTank.cs</object-name>
+        <visible>false</visible>
+        <action>
+            <button>0</button>
+            <repeatable>false</repeatable>
+            <binding>
+                <command>dialog-show</command>
+                <dialog-name>c182s-right-fuel-dialog</dialog-name>
+            </binding>
+        </action>
+        <hovered>
+            <binding>
+                <command>set-tooltip</command>
+                <tooltip-id>fuel-cap-starboard</tooltip-id>
+                <label>Fuel Cap</label>
+            </binding>
+        </hovered>
+    </animation>
  
 <animation>
    <type>pick</type>
@@ -870,9 +916,44 @@
      <button>0</button>
      <repeatable>false</repeatable>
      <binding>
+        <condition>
+            <or>
+                <equals>
+                    <property>/sim/model/door-positions/BaggageDoor/position-norm</property>
+                    <value>1</value>
+                </equals>
+                <and>
+                    <equals>
+                        <property>/sim/model/door-positions/BaggageDoor/position-norm</property>
+                        <value>0</value>
+                    </equals>
+                    <less-than>
+                        <property>velocities/groundspeed-kt</property>
+                        <value>1.0</value>
+                    </less-than>
+                </and>
+            </or>
+        </condition>
         <command>nasal</command>
-        <script>c182.BaggageDoor.toggle();</script>
+        <script>c182s.BaggageDoor.toggle();</script>
      </binding>
+      <binding>
+          <condition>
+              <equals>
+                  <property>/sim/model/door-positions/BaggageDoor/position-norm</property>
+                  <value>0</value>
+              </equals>
+          </condition>
+          <command>dialog-show</command>
+          <dialog-name>c182s-baggage-weight-dialog</dialog-name>
+      </binding>
+      <hovered>
+          <binding>
+              <command>set-tooltip</command>
+              <tooltip-id>door-handle-baggage</tooltip-id>
+              <label>Baggage Door Open/Close</label>
+          </binding>
+      </hovered>
    </action>
  </animation>
  
@@ -988,7 +1069,7 @@
 	<property>/sim/rendering/shaders/skydome</property>
 	</not>
 	<not>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 	</not>
 	</or>
 	<property>/systems/electrical/outputs/beacon</property>
@@ -1064,7 +1145,7 @@
 	<property>/sim/rendering/shaders/skydome</property>
 	</not>
 	<not>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 	</not>
 	</or>
 	<property>/systems/electrical/outputs/strobe</property>
@@ -1138,7 +1219,7 @@
 	<property>/sim/rendering/shaders/skydome</property>
 	</not>
 	<not>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 	</not>
 	</or>
 	<property>/systems/electrical/outputs/strobe</property>
@@ -1261,7 +1342,7 @@
 	<property>/sim/rendering/shaders/skydome</property>
 	</not>
 	<not>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 	</not>
 	</or>
 	<property>/systems/electrical/outputs/nav-lights</property>
@@ -1302,7 +1383,7 @@
 	<property>/sim/rendering/shaders/skydome</property>
 	</not>
 	<not>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 	</not>
 	</or>
 	<property>/systems/electrical/outputs/nav-lights</property>
@@ -1342,7 +1423,7 @@
 	<property>/sim/rendering/shaders/skydome</property>
 	</not>
 	<not>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 	</not>
 	</or>
 	<property>/systems/electrical/outputs/nav-lights</property>
@@ -1355,10 +1436,10 @@
 <condition>
 <and>
 	<property>/sim/rendering/shaders/skydome</property>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 </and>
 </condition>
-  <path>Aircraft/c182/Models/Effects/beacon.xml</path>
+  <path>Aircraft/c182s/Models/Effects/beacon.xml</path>
         <offsets>
             <x-m> 6.165 </x-m>
             <y-m> 0.003 </y-m>
@@ -1370,10 +1451,10 @@
 <condition>
 <and>
 	<property>/sim/rendering/shaders/skydome</property>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 </and>
 </condition>
-  <path>Aircraft/c182/Models/Effects/green-navlight.xml</path>
+  <path>Aircraft/c182s/Models/Effects/green-navlight.xml</path>
         <offsets>
 	<x-m>0.854</x-m>
 	<y-m>5.46</y-m>
@@ -1385,10 +1466,10 @@
 <condition>
 <and>
 	<property>/sim/rendering/shaders/skydome</property>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 </and>
 </condition>
-  <path>Aircraft/c182/Models/Effects/red-navlight.xml</path>
+  <path>Aircraft/c182s/Models/Effects/red-navlight.xml</path>
         <offsets>
 	<x-m>0.854</x-m>
 	<y-m>-5.46</y-m>
@@ -1400,10 +1481,10 @@
  <condition>
 <and>
 	<property>/sim/rendering/shaders/skydome</property>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 </and>
 </condition>
-  <path>Aircraft/c182/Models/Effects/tail-navlight.xml</path>
+  <path>Aircraft/c182s/Models/Effects/tail-navlight.xml</path>
         <offsets>
             <x-m>6.162</x-m>
             <y-m>-0.006</y-m>
@@ -1415,10 +1496,10 @@
 <condition>
 <and>
 	<property>/sim/rendering/shaders/skydome</property>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 </and>
 </condition>
-  <path>Aircraft/c182/Models/Effects/left-strobe.xml</path>
+  <path>Aircraft/c182s/Models/Effects/left-strobe.xml</path>
         <offsets>
             <x-m>0.898882</x-m>
             <y-m>-5.464475</y-m>
@@ -1431,10 +1512,10 @@
 <condition>
 <and>
 	<property>/sim/rendering/shaders/skydome</property>
-	<property>/sim/model/c182/procedural-lights</property>
+	<property>/sim/model/c182s/procedural-lights</property>
 </and>
 </condition>
-  <path>Aircraft/c182/Models/Effects/right-strobe.xml</path>
+  <path>Aircraft/c182s/Models/Effects/right-strobe.xml</path>
         <offsets>
             <x-m>0.898882</x-m>
             <y-m>5.464475</y-m>
@@ -1446,7 +1527,7 @@
 <!--exterior stuff which is not called by nasal-script-->
 
 <model>
-        <path>Aircraft/c182/Models/Exterior/pitot-cover.xml</path>
+        <path>Aircraft/c182s/Models/Exterior/pitot-cover.xml</path>
         <name>pitot-cover</name>
         <offsets>
             <x-m>0.0</x-m>
@@ -1454,7 +1535,7 @@
             <z-m>0.0</z-m>
         </offsets>
 	<condition>
-	<property>/sim/model/c182/securing/pitot-cover-visible</property>
+	<property>/sim/model/c182s/securing/pitot-cover-visible</property>
 	</condition>
 	</model>
 
@@ -1469,14 +1550,14 @@
             <button>0</button>
             <binding>
                 <command>property-toggle</command>
-        <property>/sim/model/c182/securing/pitot-cover-visible</property>
+        <property>/sim/model/c182s/securing/pitot-cover-visible</property>
             </binding>
         </action>
         <hovered>
             <binding>
                 <command>set-tooltip</command>
                 <label>Pitot Cover: %s</label>
-        <property>/sim/model/c182/securing/pitot-cover-visible</property>
+        <property>/sim/model/c182s/securing/pitot-cover-visible</property>
                 <tooltip-id>pitot-cover</tooltip-id>
                 <mapping>on-off</mapping>
             </binding>
@@ -1684,7 +1765,7 @@
 <!-- Left Tiedowns -->
     <model>
         <name>tiedownL</name>
-        <path>Aircraft/c182/Models/Exterior/tiedownL.xml</path>
+        <path>Aircraft/c182s/Models/Exterior/tiedownL.xml</path>
         <offsets>
             <x-m>0.794</x-m>
             <y-m>-2.473</y-m>
@@ -1699,7 +1780,7 @@
         <object-name>tiedownL</object-name>
         <object-name>TieDownLeft</object-name>	<!-- tiedown handle -->
         <condition>
-        <property>sim/model/c182/securing/tiedownL-visible</property>
+        <property>sim/model/c182s/securing/tiedownL-visible</property>
         </condition>
     </animation>
     
@@ -1712,14 +1793,14 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-assign</command>
-        <property>sim/model/c182/securing/tiedownL-visible</property>
+        <property>sim/model/c182s/securing/tiedownL-visible</property>
                 <value>false</value>
             </binding>
         </action>
         <hovered>
             <binding>
                 <condition>
-        <property>sim/model/c182/securing/tiedownL-visible</property>
+        <property>sim/model/c182s/securing/tiedownL-visible</property>
                 </condition>
                 <command>set-tooltip</command>
                 <tooltip-id>remove-left-tiedowns</tooltip-id>
@@ -1737,7 +1818,7 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-toggle</command>
-                   <property>sim/model/c182/securing/tiedownL-visible</property>
+                   <property>sim/model/c182s/securing/tiedownL-visible</property>
             </binding>
         </action>
         <hovered>
@@ -1752,7 +1833,7 @@
     <!-- Right Tiedowns -->
     <model>
         <name>tiedownR</name>
-        <path>Aircraft/c182/Models/Exterior/tiedownR.xml</path>
+        <path>Aircraft/c182s/Models/Exterior/tiedownR.xml</path>
         <offsets>
             <x-m>0.794</x-m>
             <y-m>2.473</y-m>
@@ -1767,7 +1848,7 @@
         <object-name>tiedownR</object-name>
         <object-name>TieDownRight</object-name>	<!-- tiedown handle -->
         <condition>
-        <property>sim/model/c182/securing/tiedownR-visible</property>
+        <property>sim/model/c182s/securing/tiedownR-visible</property>
         </condition>
     </animation>
     
@@ -1780,14 +1861,14 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-assign</command>
-        <property>sim/model/c182/securing/tiedownR-visible</property>
+        <property>sim/model/c182s/securing/tiedownR-visible</property>
                 <value>false</value>
             </binding>
         </action>
         <hovered>
             <binding>
                 <condition>
-        <property>sim/model/c182/securing/tiedownR-visible</property>
+        <property>sim/model/c182s/securing/tiedownR-visible</property>
                 </condition>
                 <command>set-tooltip</command>
                 <tooltip-id>remove-right-tiedowns</tooltip-id>
@@ -1805,7 +1886,7 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-toggle</command>
-                   <property>sim/model/c182/securing/tiedownR-visible</property>
+                   <property>sim/model/c182s/securing/tiedownR-visible</property>
             </binding>
         </action>
         <hovered>
@@ -1821,7 +1902,7 @@
     <!-- Tail Tiedowns -->
     <model>
         <name>tiedownT</name>
-        <path>Aircraft/c182/Models/Exterior/tiedownT.xml</path>
+        <path>Aircraft/c182s/Models/Exterior/tiedownT.xml</path>
         <offsets>
             <x-m>5.601</x-m>
             <y-m>0.0</y-m>
@@ -1836,7 +1917,7 @@
         <object-name>tiedownT</object-name>
         <object-name>TieDownTail</object-name> <!-- tiedown handle -->
         <condition>
-            <property>sim/model/c182/securing/tiedownT-visible</property>
+            <property>sim/model/c182s/securing/tiedownT-visible</property>
         </condition>
     </animation>
     
@@ -1849,14 +1930,14 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-assign</command>
-            <property>sim/model/c182/securing/tiedownT-visible</property>
+            <property>sim/model/c182s/securing/tiedownT-visible</property>
                 <value>false</value>
             </binding>
         </action>
         <hovered>
             <binding>
                 <condition>
-            <property>sim/model/c182/securing/tiedownT-visible</property>
+            <property>sim/model/c182s/securing/tiedownT-visible</property>
                 </condition>
                 <command>set-tooltip</command>
                 <tooltip-id>remove-tail-tiedowns</tooltip-id>
@@ -1874,7 +1955,7 @@
             <repeatable>false</repeatable>
             <binding>
                 <command>property-toggle</command>
-            <property>sim/model/c182/securing/tiedownT-visible</property>
+            <property>sim/model/c182s/securing/tiedownT-visible</property>
             </binding>
         </action>
         <hovered>
@@ -1954,7 +2035,7 @@
    <object-name>Spinner</object-name>
    <condition>
    <not>
-     <property>sim/model/c182/chrome_spinner</property>
+     <property>sim/model/c182s/chrome_spinner</property>
      </not>
    </condition>
  </animation>
@@ -1963,7 +2044,7 @@
    <type>select</type>
    <object-name>chrome_spinner</object-name>
    <condition>
-     <property>sim/model/c182/chrome_spinner</property>
+     <property>sim/model/c182s/chrome_spinner</property>
    </condition>
  </animation>
  
@@ -1972,7 +2053,7 @@
    <object-name>WheelFairing.L</object-name>
    <object-name>WheelFairing.R</object-name>
    <condition>
-     <property>sim/model/c182/mw_fairing</property>
+     <property>sim/model/c182s/mw_fairing</property>
    </condition>
  </animation>
  
@@ -1980,21 +2061,50 @@
    <type>select</type>
    <object-name>WheelFairingNose</object-name>
    <condition>
-     <property>sim/model/c182/nw_fairing</property>
+     <property>sim/model/c182s/nw_fairing</property>
    </condition>
  </animation>
 
-
-
- 
-
- 
- 
- 
- 
- 
-
-
-
+    <!-- Baggage models -->
+    <model>
+        <name>suitcase1</name>
+        <path>Baggages/suitcase1.xml</path>
+        <offsets>
+            <x-m>2.43</x-m>
+            <y-m>-0.14</y-m>
+            <z-m>-0.1</z-m>
+            <pitch-deg>-7</pitch-deg>
+        </offsets>
+    </model>
+    <model>
+        <name>suitcase2</name>
+        <path>Baggages/suitcase2.xml</path>
+        <offsets>
+            <x-m>2.43</x-m>
+            <y-m>0.14</y-m>
+            <z-m>-0.1</z-m>
+            <pitch-deg>-7</pitch-deg>
+        </offsets>
+    </model>
+    <animation>
+        <type>select</type>
+        <object-name>suitcase1</object-name>
+        <condition>
+            <greater-than>
+                <property>payload/weight[4]/weight-lb</property>
+                <value>20.0</value>
+            </greater-than>
+        </condition>
+    </animation>
+    <animation>
+        <type>select</type>
+        <object-name>suitcase2</object-name>
+        <condition>
+            <greater-than>
+                <property>payload/weight[5]/weight-lb</property>
+                <value>20.0</value>
+            </greater-than>
+        </condition>
+    </animation>
 
 </PropertyList>

@@ -1,6 +1,6 @@
 
 # liveries =========================================================
-aircraft.livery.init("Aircraft/c182/Models/Liveries", "sim/model/livery/name", "sim/model/livery/index");
+aircraft.livery.init("Aircraft/c182s/Models/Liveries", "sim/model/livery/name", "sim/model/livery/index");
 
 #wheel chocks======================================================
 #to-do:
@@ -19,7 +19,7 @@ var chocks001_model = {
 		var chocks001 = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/chock001.ac", chocks001,
+		geo.put_model("Aircraft/c182s/Models/Exterior/chock001.ac", chocks001,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 					 me.index = i;	
           },
@@ -56,7 +56,7 @@ var chocks002_model = {
 		var chocks002 = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/chock002.ac", chocks002,
+		geo.put_model("Aircraft/c182s/Models/Exterior/chock002.ac", chocks002,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 					 me.index = i;	
           },
@@ -93,7 +93,7 @@ var chocks003_model = {
 		var chocks003 = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/chock003.ac", chocks003,
+		geo.put_model("Aircraft/c182s/Models/Exterior/chock003.ac", chocks003,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 					 me.index = i;	
           },
@@ -132,7 +132,7 @@ var coneR_model = {
 		var cones = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/safety-cone_R.ac", cones,
+		geo.put_model("Aircraft/c182s/Models/Exterior/safety-cone_R.ac", cones,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 				 me.index = i;
           },
@@ -168,7 +168,7 @@ var coneL_model = {
 		var cones = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/safety-cone_L.ac", cones,
+		geo.put_model("Aircraft/c182s/Models/Exterior/safety-cone_L.ac", cones,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 				 me.index = i;
           },
@@ -209,7 +209,7 @@ var gpu_model = {
 		var gpu = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/external-power.xml", gpu,
+		geo.put_model("Aircraft/c182s/Models/Exterior/external-power.xml", gpu,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 		 me.index = i;
           },
@@ -249,7 +249,7 @@ var ladder_model = {
 		var ladder = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/ladder.xml", ladder,
+		geo.put_model("Aircraft/c182s/Models/Exterior/ladder.xml", ladder,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 				
 		 me.index = i;
@@ -289,7 +289,7 @@ var fueltanktrailer_model = {
 		var fueltanktrailer = geo.aircraft_position().set_alt(
 				props.globals.getNode("/position/ground-elev-m").getValue());
 				
-		geo.put_model("Aircraft/c182/Models/Exterior/fueltanktrailer.ac", fueltanktrailer,
+		geo.put_model("Aircraft/c182s/Models/Exterior/fueltanktrailer.ac", fueltanktrailer,
 				props.globals.getNode("/orientation/heading-deg").getValue());
 				
 		 me.index = i;
@@ -343,3 +343,103 @@ init();
 
 
 
+##########################################
+# Click Sounds
+##########################################
+
+var click = func (name, timeout=0.1, delay=0) {
+    var sound_prop = "/sim/model/c182s/sound/click-" ~ name;
+
+    settimer(func {
+        # Play the sound
+        setprop(sound_prop, 1);
+
+        # Reset the property after 0.2 seconds so that the sound can be
+        # played again.
+        settimer(func {
+            setprop(sound_prop, 0);
+        }, timeout);
+    }, delay);
+};
+
+##########################################
+# Thunder Sound
+##########################################
+
+var speed_of_sound = func (t, re) {
+    # Compute speed of sound in m/s
+    #
+    # t = temperature in Celsius
+    # re = amount of water vapor in the air
+
+    # Compute virtual temperature using mixing ratio (amount of water vapor)
+    # Ratio of gas constants of dry air and water vapor: 287.058 / 461.5 = 0.622
+    var T = 273.15 + t;
+    var v_T = T * (1 + re/0.622)/(1 + re);
+
+    # Compute speed of sound using adiabatic index, gas constant of air,
+    # and virtual temperature in Kelvin.
+    return math.sqrt(1.4 * 287.058 * v_T);
+};
+
+var thunder = func (name) {
+    var thunderCalls = 0;
+
+    var lightning_pos_x = getprop("/environment/lightning/lightning-pos-x");
+    var lightning_pos_y = getprop("/environment/lightning/lightning-pos-y");
+    var lightning_distance = math.sqrt(math.pow(lightning_pos_x, 2) + math.pow(lightning_pos_y, 2));
+
+    # On the ground, thunder can be heard up to 16 km. Increase this value
+    # a bit because the aircraft is usually in the air.
+    if (lightning_distance > 20000)
+        return;
+
+    var t = getprop("/environment/temperature-degc");
+    var re = getprop("/environment/relative-humidity") / 100;
+    var delay_seconds = lightning_distance / speed_of_sound(t, re);
+
+    # Maximum volume at 5000 meter
+    var lightning_distance_norm = std.min(1.0, 1 / math.pow(lightning_distance / 5000.0, 2));
+
+    settimer(func {
+        var thunder1 = getprop("/sim/model/c182s/sound/click-thunder1");
+        var thunder2 = getprop("/sim/model/c182s/sound/click-thunder2");
+        var thunder3 = getprop("/sim/model/c182s/sound/click-thunder3");
+
+        if (!thunder1) {
+            thunderCalls = 1;
+            setprop("/sim/model/c182s/sound/lightning/dist1", lightning_distance_norm);
+        }
+        else if (!thunder2) {
+            thunderCalls = 2;
+            setprop("/sim/model/c182s/sound/lightning/dist2", lightning_distance_norm);
+        }
+        else if (!thunder3) {
+            thunderCalls = 3;
+            setprop("/sim/model/c182s/sound/lightning/dist3", lightning_distance_norm);
+        }
+        else
+            return;
+
+        # Play the sound (sound files are about 9 seconds)
+        click("thunder" ~ thunderCalls, 9.0, 0);
+    }, delay_seconds);
+};
+
+
+############################################
+# Engine coughing sound
+############################################
+
+setlistener("/engines/active-engine/killed", func (node) {
+    if (node.getValue() and getprop("/engines/active-engine/running")) {
+        click("coughing-engine-sound", 0.7, 0);
+    };
+});
+
+
+
+setlistener("/sim/signals/fdm-initialized", func {   
+    # Listening for lightning strikes
+    setlistener("/environment/lightning/lightning-pos-y", thunder);
+});

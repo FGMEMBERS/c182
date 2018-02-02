@@ -112,11 +112,11 @@
                 <y> 0 </y>
                 <z>-47.09</z><!--includes offset due to gear compression animation, should be -47.17-->
             </location>
-            <static_friction> 0.99 </static_friction>
-            <dynamic_friction> 0.8 </dynamic_friction>
+            <static_friction> 0.5 </static_friction>
+            <dynamic_friction> 0.4 </dynamic_friction>
             <rolling_friction> 0.02 </rolling_friction>
             <spring_coeff unit="LBS/FT">3600 </spring_coeff>
-            <damping_coeff unit="LBS/FT/SEC">1800 </damping_coeff>
+            <damping_coeff unit="LBS/FT/SEC">900 </damping_coeff>
             <max_steer unit="DEG"> 11 </max_steer>
             <brake_group> NONE </brake_group>
             <retractable>0</retractable>
@@ -127,10 +127,10 @@
                 <y>-51.56 </y>
                 <z>-43.67 </z><!--includes offset due to gear compression animation, should be -41.56-->
             </location>
-            <static_friction> 0.99 </static_friction>
+            <static_friction> 0.5 </static_friction>
             <dynamic_friction> 0.4 </dynamic_friction>
             <spring_coeff unit="LBS/FT"> 5400 </spring_coeff>
-            <damping_coeff unit="LBS/FT/SEC">400 </damping_coeff>
+            <damping_coeff unit="LBS/FT/SEC">200 </damping_coeff>
             <max_steer unit="DEG"> 0.0 </max_steer>
             <brake_group> LEFT </brake_group>
             <retractable>0</retractable>
@@ -141,11 +141,11 @@
                 <y>51.56 </y>
                 <z>-43.67 </z><!--includes offset due to gear compression animation, should be -41.56-->
             </location>
-            <static_friction> 0.99 </static_friction>
+            <static_friction> 0.5</static_friction>
             <dynamic_friction> 0.4 </dynamic_friction>
             <rolling_friction> 0.02 </rolling_friction>
             <spring_coeff unit="LBS/FT">5400 </spring_coeff>
-            <damping_coeff unit="LBS/FT/SEC">400 </damping_coeff>
+            <damping_coeff unit="LBS/FT/SEC">200 </damping_coeff>
             <max_steer unit="DEG"> 0.0 </max_steer>
             <brake_group> RIGHT </brake_group>
             <retractable>0</retractable>
@@ -268,8 +268,7 @@
                 <pitch> 0 </pitch>
                 <yaw> 0 </yaw>
             </orient>
-            <feed>0</feed>
-            <feed>1</feed>
+            <feed>5</feed>
             <thruster file="prop_79in3v">
                 <location unit="IN">
                     <x> -73.62 </x>
@@ -281,36 +280,150 @@
                     <pitch> 0.0 </pitch>
                     <yaw> 0.0 </yaw>
                 </orient>
-                <sense> 1 </sense>
-  <p_factor>5 </p_factor>
+                <sense> -1 </sense>
+                <p_factor>5 </p_factor>
             </thruster>
         </engine>
+        
+        <!-- 0: left wing -->
         <tank type="FUEL">    <!-- Tank number 0 with 44 gallons =290.5lbs ?? kerosin but should be AVGas!-->
             <location unit="IN">
-                <x>36.27 </x>
+                <x> 36.27 </x>
                 <y>-59.49 </y>
                 <z> 31.21</z>
             </location>
+            <drain_location unit="M">
+                <x> 1.057   </x>
+                <y>-1.11821 </y>
+                <z> 0.68779 </z>
+            </drain_location>
             <capacity unit="LBS"> 264.88 </capacity>
             <contents unit="LBS"> 264.88</contents>
-<density unit="LBS/GAL"> 6.02 </density>
-<type>  AVGAS</type>
+            <temperature>50</temperature>
+            <density unit="LBS/GAL"> 6.02 </density>
+            <standpipe>2</standpipe>
+            <type>AVGAS</type>
         </tank>
-	
+
+        <!-- 1: right wing -->
         <tank type="FUEL">    <!-- Tank number 1 with 44 gallons =290.5lbs kerosin but should be AVGas!-->
             <location unit="IN">
                 <x> 36.27 </x>
-                <y>59.49 </y>
+                <y> 59.49 </y>
                 <z> 31.21 </z>
             </location>
+            <drain_location unit="M">
+                <x> 1.057   </x>
+                <y> 1.11821 </y>
+                <z> 0.68779 </z>
+            </drain_location>
             <capacity unit="LBS"> 264.88 </capacity>
             <contents unit="LBS"> 264.88 </contents>
-<density unit="LBS/GAL"> 6.02 </density>
-<type>  AVGAS</type>
+            <temperature>50</temperature>
+            <density unit="LBS/GAL"> 6.02 </density>
+            <standpipe>2</standpipe>
+            <type>AVGAS</type>
+        </tank>
+        
+        <!-- 2: Fuel selector sump -->
+        <tank type="FUEL">
+            <location unit="IN">
+                <x>0.45</x>
+                <y>0</y>
+                <z>-0.40</z>
+            </location>
+            <drain_location unit="M">
+                <x>0.45</x>
+                <y>0</y>
+                <z>-0.45</z>
+            </drain_location>
+            <capacity unit="LBS">0.1</capacity> <!-- todo: arbitrary numer as i dont know exact ones -->
+            <contents unit="LBS">0</contents>
+            <temperature>50</temperature>
+            <density unit="LBS/GAL"> 6.02 </density>
+            <type>AVGAS</type>
+        </tank>
+        
+        <!-- 3: Strainer sump -->
+        <tank type="FUEL">
+            <location unit="IN">
+                <x>-0.28</x>
+                <y>0</y>
+                <z>-0.30</z>
+            </location>
+            <drain_location unit="M">
+                <x>-0.28</x>
+                <y>0</y>
+                <z>-0.50</z>
+            </drain_location>
+            <capacity unit="LBS">0.1</capacity>
+            <contents unit="LBS">0</contents>
+            <temperature>50</temperature>
+            <density unit="LBS/GAL"> 6.02 </density>
+            <type>AVGAS</type>
+        </tank>
+        
+        <!-- 4: Fuel pipe -->
+        <tank type="FUEL">
+            <location unit="IN">
+                <x>-0.35</x>
+                <y>0</y>
+                <z>-0.30</z>
+            </location>
+            <drain_location unit="M">
+                <x>-0.35</x>
+                <y>0</y>
+                <z>-0.50</z>
+            </drain_location>
+            <capacity unit="LBS">0.05</capacity>
+            <contents unit="LBS">0</contents>
+            <temperature>50</temperature>
+            <density unit="LBS/GAL"> 6.02 </density>
+            <type>AVGAS</type>
+        </tank>
+        
+        <!-- 5: engine manifold (engine feeds from here) -->
+        <tank type="FUEL">
+            <location unit="IN">
+                <x>-0.60</x>
+                <y>0</y>
+                <z>-0.30</z>
+            </location>
+            <drain_location unit="M">
+                <x>-0.60</x>
+                <y>0</y>
+                <z>-0.50</z>
+            </drain_location>
+            <capacity unit="LBS">0.1</capacity>
+            <contents unit="LBS">0</contents>
+            <temperature>50</temperature>
+            <density unit="LBS/GAL"> 6.02 </density>
+            <type>AVGAS</type>
+        </tank>
+        
+        <!-- 6: "virtual" mix-to-engine tank (workaround for starter mixture) -->
+        <tank type="FUEL">
+            <location unit="IN">
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </location>
+            <drain_location unit="M">
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </drain_location>
+            <capacity unit="LBS">0.001</capacity>
+            <contents unit="LBS">0</contents>
+            <priority>0</priority>
         </tank>
     </propulsion>
     
-
+    <system file="fuel"/> <!-- integrate advanced fuel system -->
+    
+    <system file="external-heat"/> <!-- integrate external-heater -->
+    
+    <system file="electrical"/> <!-- load electrical system -->
     
     <flight_control name="FCS: c182s">
 <!--Cessna 182S POH Page 7-12: nose gear steer deg=11deg, by applying left or right brake increasing steer deg up to 29deg-->
@@ -484,8 +597,20 @@
         </channel>
 	
        <channel name="Flaps">
+           <!-- Disable flap movement if electrical voltage is too low -->
+            <switch name="Flaps Command">
+                <default value="fcs/flap-cmd-norm"/>
+                <output>fcs/flap-input-norm</output>
+
+                <!-- Route back the (normalized) output of the <kinematic>
+                     to its input in order to disable it.
+                -->
+                <test logic="AND" value="fcs/flap-pos-norm">
+                    /systems/electrical/outputs/flaps le 16
+                </test>
+            </switch>
             <kinematic name="Flaps Control">
-                <input>fcs/flap-cmd-norm</input>
+                <input>fcs/flap-input-norm</input>
                 <traverse>
                     <setting>
                         <position>0</position>
@@ -535,7 +660,7 @@
                  <output>/sim/model/c182s/cockpit/flaps-lever</output>
              </kinematic>
         </channel>
-<!--
+        <!--
             Cowl Flaps 
         -->
         <channel name="Cowl Flaps">
@@ -562,11 +687,33 @@
                   <max>1</max>
                 </domain>
                 <range>
-                    <min>0.48</min>
-                    <max>0.85</max>
+                    <!-- Defines cooling airflow with min=closed/max=open cowl flaps -->
+                    <min>0.35</min>
+                    <max>0.80</max>
                 </range>
-                <output>propulsion/engine[0]/cooling-factor</output>
+                <output>propulsion/engine[0]/cooling-factor-cowlflaps</output>
             </aerosurface_scale>
+            <switch name="cooling-factor-winterkit">
+                <!-- winter kit reduces cooling airflow -->
+                <default value="1"/>
+                <test logic="AND" value="0.50">
+                    /engines/engine/winter-kit-installed  EQ  1
+                </test>
+                <output>propulsion/engine[0]/cooling-factor-winterkit</output>
+            </switch>
+            <fcs_function name="engine-cooling-factor">
+                <function>
+                    <product>
+                        <property>propulsion/engine[0]/cooling-factor-winterkit</property>
+                        <property>propulsion/engine[0]/cooling-factor-cowlflaps</property>
+                    </product>
+                </function>
+                <clipto>
+                    <min>0</min>
+                    <max>1</max>
+                </clipto>
+                <output>propulsion/engine[0]/cooling-factor</output> <!-- final cooling factor to engine -->
+            </fcs_function>
 	</channel>
 	
 <channel name= "brake-lever">
@@ -585,7 +732,7 @@
                  <output>/sim/model/c182s/cockpit/brake-lever</output>
              </kinematic>
 </channel>
-	
+
     </flight_control>	
 
 <aerodynamics>
@@ -856,7 +1003,7 @@
                     <property>metrics/Sw-sqft</property>
                     <property>aero/function/kCLge</property>
                         <property>propulsion/engine[0]/cowl-flaps-norm</property>
-                    <value>0.0077</value>
+                    <value>0.028</value>
                 </product>
             </function>
 
@@ -1387,6 +1534,6 @@
     <system file="c182s-stallhorn"/>
     <system file="propulsion"/>
     <system file="indicated-airspeed"/>
-   <system file="c182s-ground-effects"/>    
+    <system file="c182s-ground-effects"/>    
 
 </fdm_config>

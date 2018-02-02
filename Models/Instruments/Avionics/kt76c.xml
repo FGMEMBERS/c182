@@ -4,6 +4,8 @@
 Bendix/King KT76c Transponder
 Gary "Buckaroo" Neely
 Released under GNU GENERAL PUBLIC LICENSE Version 2
+
+Factory VFR code can be changed in "/instrumentation/transponder/factory-vfr-code"
 -->
 
 <PropertyList>
@@ -14,24 +16,130 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
   <type>material</type>
   <object-name>Bezel</object-name>
   <object-name>Knob</object-name>
-  <object-name>BtnIDT</object-name>
-  <object-name>BtnCLR</object-name>
-  <object-name>BtnVFR</object-name>
-  <object-name>Btn0</object-name>
-  <object-name>Btn1</object-name>
-  <object-name>Btn2</object-name>
-  <object-name>Btn3</object-name>
-  <object-name>Btn4</object-name>
-  <object-name>Btn5</object-name>
-  <object-name>Btn6</object-name>
-  <object-name>Btn7</object-name>
     <emission>
-      <red>1.0</red>
-      <green>1.0</green>
-      <blue>1.0</blue>
+      <red>0.25</red>
+      <green>0.25</green>
+      <blue>0.25</blue>
       <factor-prop>/systems/electrical/outputs/glareshield-lights-norm</factor-prop>
     </emission>
+    <specular>
+        <red>   0.0 </red>
+        <green> 0.0 </green>
+        <blue>  0.0 </blue>
+    </specular>
+    <ambient>
+        <red>   1 </red>
+        <green> 1 </green>
+        <blue>  1 </blue>
+    </ambient>
+    <diffuse>
+        <red>   0.3 </red>
+        <green> 0.3 </green>
+        <blue>  0.3 </blue>
+    </diffuse>
+    <shininess>
+        <red>   0 </red>
+        <green> 0 </green>
+        <blue>  0 </blue>
+    </shininess>
 </animation>
+
+<animation>
+        <type>material</type>
+        <object-name>BtnIDT</object-name>
+        <object-name>BtnCLR</object-name>
+        <object-name>BtnVFR</object-name>
+        <object-name>Btn0</object-name>
+        <object-name>Btn1</object-name>
+        <object-name>Btn2</object-name>
+        <object-name>Btn3</object-name>
+        <object-name>Btn4</object-name>
+        <object-name>Btn5</object-name>
+        <object-name>Btn6</object-name>
+        <object-name>Btn7</object-name>
+        <condition>
+            <not>
+                <property>sim/rendering/rembrandt/enabled</property>
+            </not>
+            <greater-than>
+                <property>/systems/electrical/outputs/radio-lights-norm</property>
+                <value>0</value>
+            </greater-than>
+        </condition>
+        <emission>
+            <red>0.5</red>
+            <green>0.1</green>
+            <blue>0.00005</blue>
+            <factor-prop>/systems/electrical/outputs/radio-lights-norm</factor-prop>
+        </emission>
+            <specular>
+                <red>   0.0 </red>
+                <green> 0.0 </green>
+                <blue>  0.0 </blue>
+            </specular>
+            <ambient>
+                <red>   1 </red>
+                <green> 1 </green>
+                <blue>  1 </blue>
+            </ambient>
+            <diffuse>
+                <red>   0.3 </red>
+                <green> 0.3 </green>
+                <blue>  0.3 </blue>
+            </diffuse>
+            <shininess>
+                <red>   0 </red>
+                <green> 0 </green>
+                <blue>  0 </blue>
+            </shininess>
+    </animation>
+    <animation>
+        <type>material</type>
+        <object-name>BtnIDT</object-name>
+        <object-name>BtnCLR</object-name>
+        <object-name>BtnVFR</object-name>
+        <object-name>Btn0</object-name>
+        <object-name>Btn1</object-name>
+        <object-name>Btn2</object-name>
+        <object-name>Btn3</object-name>
+        <object-name>Btn4</object-name>
+        <object-name>Btn5</object-name>
+        <object-name>Btn6</object-name>
+        <object-name>Btn7</object-name>
+        <condition>
+            <equals>
+                <property>/systems/electrical/outputs/radio-lights-norm</property>
+                <value>0</value>
+            </equals>
+        </condition>
+        <emission>
+            <red>0.25</red>
+            <green>0.25</green>
+            <blue>0.25</blue>
+            <factor-prop>/systems/electrical/outputs/glareshield-lights-norm</factor-prop>
+        </emission>
+        <specular>
+            <red>   0.0 </red>
+            <green> 0.0 </green>
+            <blue>  0.0 </blue>
+        </specular>
+        <ambient>
+            <red>   1 </red>
+            <green> 1 </green>
+            <blue>  1 </blue>
+        </ambient>
+        <diffuse>
+            <red>   0.3 </red>
+            <green> 0.3 </green>
+            <blue>  0.3 </blue>
+        </diffuse>
+        <shininess>
+            <red>   0 </red>
+            <green> 0 </green>
+            <blue>  0 </blue>
+        </shininess>
+        </animation>
+
 <animation>
   <type>material</type>
   <object-name>LabelsAlt</object-name>
@@ -77,6 +185,7 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
   <object-name>CodeDigit4</object-name>
   <condition>
     <property>/systems/electrical/outputs/kt-76c</property>
+    <property>/controls/switches/kt-76c</property>
   </condition>
 </animation>
 
@@ -166,65 +275,83 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
   </axis>
 </animation>
 
-
-<animation>
-  <type>rotate</type>
-  <object-name>Knob</object-name>
-  <property>/controls/switches/kt-76c</property>
-  <interpolation>
-    <entry><ind>0</ind><dep>  0</dep></entry>
-    <entry><ind>1</ind><dep> 40</dep></entry>
-    <entry><ind>2</ind><dep> 80</dep></entry>
-    <entry><ind>3</ind><dep>140</dep></entry>
-    <entry><ind>4</ind><dep>180</dep></entry>
-  </interpolation>
-  <center>
-    <x-m>0</x-m>
-    <y-m>0.063</y-m>
-    <z-m>0</z-m>
-  </center>
-  <axis>
-    <x>-1</x>
-    <y>0</y>
-    <z>0</z>
-  </axis>
-</animation>
-
+  <animation>
+        <type>knob</type>
+        <object-name>Knob</object-name>
+        <property>/controls/switches/kt-76c</property>
+        <interpolation>
+            <entry><ind>0</ind><dep>  0</dep></entry>
+            <entry><ind>1</ind><dep> -40</dep></entry>
+            <entry><ind>2</ind><dep> -80</dep></entry>
+            <entry><ind>3</ind><dep>-140</dep></entry>
+            <entry><ind>4</ind><dep>-180</dep></entry>
+        </interpolation>
+        <axis>
+            <x>1</x>
+            <y>0</y>
+            <z>0</z>
+        </axis>
+        <center>
+            <x-m>0</x-m>
+            <y-m>0.063</y-m>
+            <z-m>0</z-m>
+        </center>
+        
+        <increase>
+            <binding>
+                <command>property-adjust</command>
+                <property>/controls/switches/kt-76c</property>
+                <step>1</step>
+                <min>0</min>
+                <max>4</max>
+                <wrap>false</wrap>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kt76c-dial")</script>
+            </binding>
+        </increase>
+        <decrease>
+            <binding>
+                <command>property-adjust</command>
+                <property>/controls/switches/kt-76c</property>
+                <step>-1</step>
+                <min>0</min>
+                <max>4</max>
+                <wrap>false</wrap>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kt76c-dial")</script>
+            </binding>
+        </decrease>
+        <hovered>
+            <binding>
+                <command>set-tooltip</command>
+                <tooltip-id>transMode</tooltip-id>
+                <label>Mode: %s</label>
+                <property>/controls/switches/kt-76c</property>
+                <mapping>nasal</mapping>
+                <script>
+                    var modes = ['OFF', 'SBY', 'TST', 'ON', 'ALT'];
+                    return modes[arg[0]];
+                </script>
+            </binding>
+        </hovered>
+    </animation>
 
 <animation>
     <type>pick</type>
-    <object-name>Knob</object-name>
+    <object-name>BtnIDT</object-name>
     <visible>true</visible>
     <action>
       <button>0</button>
       <repeatable>false</repeatable>
         <binding>
-          <command>property-adjust</command>
-          <property>/controls/switches/kt-76c</property>
-          <step>1</step>
-          <min>0</min>
-          <max>4</max>
-          <wrap>false</wrap>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
-     </action>
-  </animation>
-  
-<animation>
-    <type>pick</type>
-    <object-name>Knob</object-name>
-    <visible>true</visible>
-    <action>
-      <button>1</button>
-      <repeatable>false</repeatable>
-        <binding>
-          <command>property-adjust</command>
-          <property>/controls/switches/kt-76c</property>
-          <step>-1</step>
-          <min>0</min>
-          <max>4</max>
-          <wrap>false</wrap>
-        </binding>
-     </action>
+    </action>
   </animation>
   
 <animation>
@@ -236,7 +363,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(0);</script>
+          <script>c182s.kt76c_button_code(0);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -250,7 +381,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(1);</script>
+          <script>c182s.kt76c_button_code(1);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -264,7 +399,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(2);</script>
+          <script>c182s.kt76c_button_code(2);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -278,7 +417,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(3);</script>
+          <script>c182s.kt76c_button_code(3);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -292,7 +435,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(4);</script>
+          <script>c182s.kt76c_button_code(4);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -306,7 +453,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(5);</script>
+          <script>c182s.kt76c_button_code(5);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -320,7 +471,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(6);</script>
+          <script>c182s.kt76c_button_code(6);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -334,7 +489,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
           <command>nasal</command>
-          <script>c182.kt76c_button_code(7);</script>
+          <script>c182s.kt76c_button_code(7);</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -348,7 +507,11 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
         <command>nasal</command>
-          <script>c182.kt76c_button_clr();</script>
+          <script>c182s.kt76c_button_clr();</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
@@ -362,10 +525,56 @@ Released under GNU GENERAL PUBLIC LICENSE Version 2
       <repeatable>false</repeatable>
  <binding>
         <command>nasal</command>
-          <script>c182.kt76c_button_vfr();</script>
+          <script>c182s.kt76c_button_vfr();</script>
+        </binding>
+        <binding>
+          <command>nasal</command>
+          <script>c182s.click("kt76c-mode")</script>
         </binding>
     </action>
   </animation>
+  
+  
+  <!-- TEXT OSG -->
+    <text>
+        <name>textosg</name>
+        <type type="string">literal</type>
+        <text type="string">Tansponder</text>
+        <draw-text type="bool">true</draw-text>
+        <font>Helvetica.txf</font>
+        <character-size type="double">0.014</character-size>
+        <character-aspect-ratio type="double">1.0</character-aspect-ratio>
+        <axis-alignment>yz-plane</axis-alignment>
+        <max-height>0.06</max-height>
+        <max-width>0.15</max-width>
+        <font-resolution>
+            <width type="int">64</width>
+            <height type="int">64</height>
+        </font-resolution>
+        <alignment>center-center</alignment>
+        <offsets>
+            <x-m>  0.015 </x-m>
+            <y-m>  0.000 </y-m>
+            <z-m>  0.007 </z-m>
+        </offsets>
+    </text>
+    <animation>
+        <type>material</type>
+        <object-name>textosg</object-name>
+        <emission>
+            <red>   0.8 </red>
+            <green> 0.8 </green>
+            <blue>  0.0 </blue>
+        </emission>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <object-name>textosg</object-name>
+        <condition>
+            <property>sim/panel-hotspots</property>
+        </condition>
+    </animation>
 
 
 </PropertyList>

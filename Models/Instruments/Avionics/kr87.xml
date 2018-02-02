@@ -35,20 +35,35 @@
         <object-name>Volume</object-name>
         <object-name>FRQOuter</object-name>
         <object-name>FRQInner</object-name>
-        <object-name>knobs.ADF</object-name>
-        <object-name>knobs.BFO</object-name>
-        <object-name>knobs.FRQ</object-name>
-        <object-name>knobs.FLT</object-name>
-        <object-name>knobs.SET</object-name>
         <emission>
-          <red>1.0</red>
-          <green>1.0</green>
-          <blue>1.0</blue>
-<factor-prop>/systems/electrical/outputs/glareshield-lights-norm</factor-prop>
+          <red>0.45</red>
+          <green>0.45</green>
+          <blue>0.45</blue>
+          <factor-prop>/systems/electrical/outputs/glareshield-lights-norm</factor-prop>
         </emission>
+        <specular>
+            <red>   0.0 </red>
+            <green> 0.0 </green>
+            <blue>  0.0 </blue>
+        </specular>
+        <ambient>
+            <red>   1 </red>
+            <green> 1 </green>
+            <blue>  1 </blue>
+        </ambient>
+        <diffuse>
+            <red>   0.3 </red>
+            <green> 0.3 </green>
+            <blue>  0.3 </blue>
+        </diffuse>
+        <shininess>
+            <red>   0 </red>
+            <green> 0 </green>
+            <blue>  0 </blue>
+        </shininess>
     </animation>
     
-    <animation>
+   <!-- <animation>
         <type>material</type>
         <object-name>indicator</object-name>
         <emission>
@@ -58,6 +73,112 @@
             <factor-prop alias="../../../params/dimming"/>
             <offset>1</offset>
         </emission>
+    </animation>-->
+    
+     <animation>
+        <type>material</type>
+        <object-name>indicator</object-name>
+        <condition>
+            <and>
+                <not>
+                    <property>sim/rendering/rembrandt/enabled</property>
+                </not>
+                <greater-than>
+                    <property>/systems/electrical/outputs/radio-lights-norm</property>
+                    <value>0.0</value>
+                </greater-than>
+            </and>
+        </condition>
+        <emission>
+            <red>1</red>
+            <green>1</green>
+            <blue>1</blue>
+            <factor-prop>/systems/electrical/outputs/radio-lights-norm</factor-prop>
+        </emission>
+    </animation>
+    
+    <animation>
+        <type>material</type>
+        <object-name>knobs.ADF</object-name>
+        <object-name>knobs.BFO</object-name>
+        <object-name>knobs.FRQ</object-name>
+        <object-name>knobs.FLT</object-name>
+        <object-name>knobs.SET</object-name>
+        <condition>
+            <not>
+                <property>sim/rendering/rembrandt/enabled</property>
+            </not>
+            <greater-than>
+                <property>/systems/electrical/outputs/radio-lights-norm</property>
+                <value>0</value>
+            </greater-than>
+        </condition>
+        <emission>
+            <red>0.5</red>
+            <green>0.1</green>
+            <blue>0.00005</blue>
+            <factor-prop>/systems/electrical/outputs/radio-lights-norm</factor-prop>
+        </emission>
+        <specular>
+            <red>   0.0 </red>
+            <green> 0.0 </green>
+            <blue>  0.0 </blue>
+        </specular>
+        <ambient>
+            <red>   1 </red>
+            <green> 1 </green>
+            <blue>  1 </blue>
+        </ambient>
+        <diffuse>
+            <red>   0.3 </red>
+            <green> 0.3 </green>
+            <blue>  0.3 </blue>
+        </diffuse>
+        <shininess>
+            <red>   0 </red>
+            <green> 0 </green>
+            <blue>  0 </blue>
+        </shininess>
+    </animation>
+    <animation>
+        <type>material</type>
+        <object-name>knobs.ADF</object-name>
+        <object-name>knobs.BFO</object-name>
+        <object-name>knobs.FRQ</object-name>
+        <object-name>knobs.FLT</object-name>
+        <object-name>knobs.SET</object-name>
+        <condition>
+            <equals>
+                <property>/systems/electrical/outputs/radio-lights-norm</property>
+                <value>0</value>
+            </equals>
+        </condition>
+        <emission>
+            <red>0.45</red>
+            <green>0.45</green>
+            <blue>0.45</blue>
+            <factor-prop>/systems/electrical/outputs/glareshield-lights-norm</factor-prop>
+        </emission>
+        <specular>
+            <red>   0.0 </red>
+            <green> 0.0 </green>
+            <blue>  0.0 </blue>
+        </specular>
+        <ambient>
+            <red>   1 </red>
+            <green> 1 </green>
+            <blue>  1 </blue>
+        </ambient>
+        <diffuse>
+            <red>   0.3 </red>
+            <green> 0.3 </green>
+            <blue>  0.3 </blue>
+        </diffuse>
+        <shininess>
+            <red>   0 </red>
+            <green> 0 </green>
+            <blue>  0 </blue>
+        </shininess>
     </animation>
 
     <animation>
@@ -293,6 +414,10 @@
                 <command>property-toggle</command>
                 <property>/instrumentation/adf[0]/adf-btn</property>
             </binding>
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
                    </action>
     </animation>
 
@@ -318,7 +443,10 @@
                 <command>property-toggle</command>
                 <property>/instrumentation/adf[0]/bfo-btn</property>
             </binding>
-           
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
         </action>
     </animation>
 
@@ -365,14 +493,20 @@
                 <property>/instrumentation/adf[0]/display-mode</property>
                 <value type="int">0</value>
             </binding>
-          
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
             <mod-up>
                 <binding>
                     <command>property-assign</command>
                     <property>/instrumentation/adf[0]/frq-btn</property>
                     <value type="int">0</value>
                 </binding>
-               
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
             </mod-up>
         </action>
     </animation>
@@ -408,14 +542,20 @@
                 <max>3</max>
                 <wrap>true</wrap>
             </binding>
-            
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
             <mod-up>
                 <binding>
                     <command>property-assign</command>
                     <property>/instrumentation/adf[0]/flt-btn</property>
                     <value type="int">0</value>
                 </binding>
-               
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
             </mod-up>
         </action>
     </animation>
@@ -443,14 +583,20 @@
                 <property>/instrumentation/adf[0]/set-btn</property>
                 <value type="int">1</value>
             </binding>
-          
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
             <mod-up>
                 <binding>
                     <command>property-assign</command>
                     <property>/instrumentation/adf[0]/set-btn</property>
                     <value type="int">0</value>
                 </binding>
-             
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf")</script>
+            </binding>
             </mod-up>
         </action>
     </animation>
@@ -507,9 +653,20 @@
                 <property>/instrumentation/adf[0]/power-btn</property>
                 <value type="bool">0</value>
             </binding>
-
-         
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf-dial")</script>
+            </binding>         
         </action>
+        <hovered>
+            <binding>
+                <command>set-tooltip</command>
+                <tooltip-id>adfVolume</tooltip-id>
+                <label>Volume: %3d%%</label>
+                <property>/instrumentation/adf[0]/volume-norm</property>
+                <mapping>percent</mapping>
+            </binding>
+        </hovered>
     </animation>
 
     <!-- inner frequency (1 KHz) knob -->
@@ -548,7 +705,10 @@
                 <max>360</max>
                 <wrap>true</wrap>
             </binding>
-           
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf-dial")</script>
+            </binding>         
         </action>
     </animation>
 
@@ -587,8 +747,53 @@
                 <max>360</max>
                 <wrap>true</wrap>
             </binding>
-          
+            <binding>
+                <command>nasal</command>
+                <script>c182s.click("kr87-adf-dial")</script>
+            </binding>         
         </action>
     </animation>
 
+    
+    <!-- TEXT OSG -->
+    <text>
+        <name>textosg</name>
+        <type type="string">literal</type>
+        <text type="string">ADF Radio</text>
+        <draw-text type="bool">true</draw-text>
+        <font>Helvetica.txf</font>
+        <character-size type="double">0.014</character-size>
+        <character-aspect-ratio type="double">1.0</character-aspect-ratio>
+        <axis-alignment>yz-plane</axis-alignment>
+        <max-height>0.06</max-height>
+        <max-width>0.15</max-width>
+        <font-resolution>
+            <width type="int">64</width>
+            <height type="int">64</height>
+        </font-resolution>
+        <alignment>center-center</alignment>
+        <offsets>
+            <x-m>  0.015 </x-m>
+            <y-m>  0.000 </y-m>
+            <z-m>  0.007 </z-m>
+        </offsets>
+    </text>
+    <animation>
+        <type>material</type>
+        <object-name>textosg</object-name>
+        <emission>
+            <red>   0.8 </red>
+            <green> 0.8 </green>
+            <blue>  0.0 </blue>
+        </emission>
+    </animation>
+
+    <animation>
+        <type>select</type>
+        <object-name>textosg</object-name>
+        <condition>
+            <property>sim/panel-hotspots</property>
+        </condition>
+    </animation>
+    
 </PropertyList>

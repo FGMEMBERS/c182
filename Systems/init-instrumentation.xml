@@ -6,9 +6,13 @@
   <indicated-speed-kt type="double">0</indicated-speed-kt>
 </airspeed-indicator>
 
-<audio-panel>
-  <test type="int">0</test>
-</audio-panel>
+<annunciator>
+    <testswitch type="int">1</testswitch>
+    <dim-factor type="float">1</dim-factor>
+    <serviceable type="bool">1</serviceable>
+</annunciator>
+
+<audio-panel include="../Models/Instruments/Avionics/gma340properties.xml"/>
 
 <marker-beacon>
   <test type="int">0</test>
@@ -44,6 +48,7 @@
     <display-sby-mhz type="int">0</display-sby-mhz>
     <standby-mhz-fmt type="string">122.75</standby-mhz-fmt>
   </frequencies>
+  <volume-selected type="double">0</volume-selected>
 </comm>
 <comm n="1">
   <frequencies>
@@ -54,6 +59,7 @@
     <display-sby-mhz type="int">0</display-sby-mhz>
     <standby-mhz-fmt type="string">122.75</standby-mhz-fmt>
   </frequencies>
+  <volume-selected type="double">0</volume-selected>
 </comm>
 
 <transponder>
@@ -73,7 +79,12 @@
   </frequencies>
 </dme>
 
-
+<davtron803>
+    <top-mode type="string">F</top-mode>
+    <bot-mode type="string">LT</bot-mode>
+    <flight-time type="string">00:00</flight-time>
+    <elapsed-time type="string">00:00</elapsed-time>
+</davtron803>
 
 
 </PropertyList>

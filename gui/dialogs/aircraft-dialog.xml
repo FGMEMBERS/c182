@@ -42,6 +42,139 @@
 	</group>
 	<hrule/>
     
+    <group>
+        <layout>vbox</layout>
+        <text><halign>left</halign>
+            <label>Start options:</label>
+        </text>
+        <empty><stretch>true</stretch></empty>
+        <radio>
+            <halign>left</halign>
+            <label>Automatic</label>
+            <property>/sim/start-state-internal/gui-radio-auto</property>
+            <live>true</live>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>property-assign</command>
+                <property>/sim/start-state</property>
+                <value>auto</value>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>
+                    c182s.updateStateSettingGUI();
+                </script>
+            </binding>
+        </radio>
+        <radio>
+            <halign>left</halign>
+            <label>Saved state</label>
+            <property>/sim/start-state-internal/gui-radio-saved</property>
+            <live>true</live>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>property-assign</command>
+                <property>/sim/start-state</property>
+                <value>saved</value>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>
+                    c182s.updateStateSettingGUI();
+                </script>
+            </binding>
+        </radio>
+        <radio>
+            <halign>left</halign>
+            <label>Cold and Dark</label>
+            <property>/sim/start-state-internal/gui-radio-cold-and-dark</property>
+            <live>true</live>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>property-assign</command>
+                <property>/sim/start-state</property>
+                <value>cold-and-dark</value>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>
+                    c182s.updateStateSettingGUI();
+                </script>
+            </binding>
+        </radio>
+        <radio>
+            <halign>left</halign>
+            <label>Ready for Takeoff</label>
+            <property>/sim/start-state-internal/gui-radio-ready-for-takeoff</property>
+            <live>true</live>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>property-assign</command>
+                <property>/sim/start-state</property>
+                <value>ready-for-takeoff</value>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>
+                    c182s.updateStateSettingGUI();
+                </script>
+            </binding>
+        </radio>
+        <radio>
+            <halign>left</halign>
+            <label>Cruising</label>
+            <property>/sim/start-state-internal/gui-radio-cruising</property>
+            <live>true</live>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>property-assign</command>
+                <property>/sim/start-state</property>
+                <value>cruising</value>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>
+                    c182s.updateStateSettingGUI();
+                </script>
+            </binding>
+        </radio>
+        
+        <button>
+            <halign>center</halign>
+            <legend>Apply now</legend>
+            <pref-width>85</pref-width>
+            <pref-height>28</pref-height>
+            <enable>
+                <and>
+                    <not>
+                        <property>/sim/freeze/replay-state</property>
+                    </not>
+                    <not>
+                        <property>/sim/start-state-internal/gui-radio-saved</property>
+                    </not>
+                </and>
+            </enable>
+            <binding>
+                <command>nasal</command>
+                <script>
+                    c182s.applyAircraftState();
+                </script>
+            </binding>
+        </button>
+    </group>
+    
+    <hrule/>
+    
 	<group>
 	<layout>vbox</layout>
 	<padding>6</padding>
@@ -58,8 +191,157 @@
                     <command>dialog-update</command><!-- makes sure that command is still there when dialog is closed-->
                 </binding>
 	</checkbox>
+    
+            <checkbox>
+                <halign>left</halign>
+                <label>Enable frost and fog</label>
+                <property>/sim/model/c182s/enable-fog-frost</property>
+                <live>true</live>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+    
+            <checkbox>
+                <halign>left</halign>
+                <label>Complex engine procedures and failures</label>
+                <property>/engines/engine/complex-engine-procedures</property>
+                <live>true</live>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+            
+            <group>
+                <layout>hbox</layout>
+                <!-- Small left padding -->
+                <group>
+                    <layout>vbox</layout>
+                    <padding>6</padding>
+                </group>
+
+                <group>
+                    <layout>hbox</layout>
+                    <checkbox>
+                        <halign>left</halign>
+                        <label>  Allow Fuel Contamination</label>
+                        <property>/engines/engine/allow-fuel-contamination</property>
+                        <live>true</live>
+                        <enable>
+                            <and>
+                                <property>/engines/engine/complex-engine-procedures</property>
+                            </and>
+                        </enable>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                    </checkbox>
+                </group>
+                
+                <empty><stretch>true</stretch></empty> <!-- force group to the left -->
+            </group>
+            
+             <group>
+                <layout>hbox</layout>
+                <!-- Small left padding -->
+                <group>
+                    <layout>vbox</layout>
+                    <padding>6</padding>
+                </group>
+                
+                <group>
+                    <layout>hbox</layout>
+                    <checkbox>
+                        <halign>left</halign>
+                        <label>  Allow Oil Management</label>
+                        <property>/engines/engine/allow-oil-management</property>
+                        <live>true</live>
+                        <enable>
+                            <and>
+                                <property>/engines/engine/complex-engine-procedures</property>
+                            </and>
+                        </enable>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                    </checkbox>
+                </group>
+                
+                <empty><stretch>true</stretch></empty> <!-- force group to the left -->
+            </group>
+            
+                
         </group>
+        
+        <checkbox>
+            <halign>left</halign>
+            <label>Winter Kit installed</label>
+            <property>/engines/engine/winter-kit-installed</property>
+            <live>true</live>
+            <enable>
+                <and>
+                    <less-than>
+                        <property>velocities/groundspeed-kt</property>
+                        <value>0.1</value>
+                    </less-than>
+                    <less-than>
+                        <property>/engines/engine/thruster/rpm</property>
+                        <value>0.0001</value>
+                    </less-than>
+                </and>
+            </enable>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+        </checkbox>
+        
 <hrule/>
+
+        <group>
+            <layout>hbox</layout>
+
+            <!-- to be implemented
+            <checkbox>
+                <halign>left</halign>
+                <label>Damage</label>
+                <property>/fdm/jsbsim/settings/damage</property>
+                <live>true</live>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>-->
+
+            <button>
+                <halign>right</halign>
+                <legend>Repair</legend>
+                <pref-width>60</pref-width>
+                <pref-height>28</pref-height>
+                <enable>
+                    <and>
+                        <not>
+                            <property>/sim/freeze/replay-state</property>
+                        </not>
+                        <less-than>
+                            <property>velocities/groundspeed-kt</property>
+                            <value>1.0</value>
+                        </less-than>
+                        <not>
+                            <property>/engines/engine[0]/running</property>
+                        </not>
+                    </and>
+                </enable>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+                        c182s.repair_damage();
+                        c182s.click("engine-repair", 6.0);
+                    </script>
+                </binding>
+            </button>
+        </group>
+
+        <hrule/>
+
 
 <group>
 	<layout>hbox</layout>

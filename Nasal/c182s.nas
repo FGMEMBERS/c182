@@ -2,9 +2,10 @@
 # liveries =========================================================
 aircraft.livery.init("Aircraft/c182s/Models/Liveries", "sim/model/livery/name", "sim/model/livery/index");
 
+#following ground equipement stuff placing was only possible by the help of the work by: Melchior Franz, Anders Gidenstam, Detelf Faber, onox. Thanks!
 #wheel chocks======================================================
-#to-do:
-#credits
+
+
 
 var chocks001_model = {
        index:   0,
@@ -117,8 +118,7 @@ settimer(init_common,0);
 
 
 #safety-cones======================================================
-#to-do:
-#credits
+
 
 var coneR_model = {
        index:   0,
@@ -193,8 +193,7 @@ settimer(init_common,0);
 
 
 #ground-power======================================================
-#to-do:
-#credits
+
 
 var gpu_model = {
        index:   0,
@@ -235,8 +234,8 @@ settimer(init_common,0);
 
 
 #ladder======================================================
-#to-do:
-#credits
+
+
 var ladder_model = {
        index:   0,
        add:   func {
@@ -275,8 +274,8 @@ settimer(init_common,0);
 
 
 #fueltanktrailer======================================================
-#to-do:
-#credits
+
+
 var fueltanktrailer_model = {
        index:   0,
        add:   func {
@@ -314,7 +313,44 @@ var init_common = func {
 settimer(init_common,0);
 
 
+#Engine PreHeater======================================================
 
+
+var EngPreHeat_model = {
+       index:   0,
+       add:   func {
+                          #print("EngPreHeat_model.add");
+  var manager = props.globals.getNode("/models", 1);
+                var i = 0;
+                for (; 1; i += 1)
+                   if (manager.getChild("model", i, 0) == nil)
+                      break;
+		var EngPreHeat = geo.aircraft_position().set_alt(
+				props.globals.getNode("/position/ground-elev-m").getValue());
+				
+		geo.put_model("Aircraft/c182s/Models/Exterior/RedDragonEnginePreHeater.ac", EngPreHeat,
+				props.globals.getNode("/orientation/heading-deg").getValue());
+				
+		 me.index = i;
+				
+          },
+	  
+       remove:   func {
+                #print("EngPreHeat_model.remove");
+             props.globals.getNode("/models", 1).removeChild("model", me.index);
+          },
+};
+
+var init_common = func {
+	setlistener("/engines/engine/external-heat/enabled", func(n) {
+		if (n.getValue()) {
+				EngPreHeat_model.add();
+		} else  {
+			EngPreHeat_model.remove();
+		}
+	});
+}
+settimer(init_common,0);
 	
 
 # doors ============================================================
@@ -325,15 +361,26 @@ WindowR = aircraft.door.new( "/sim/model/door-positions/WindowR", 2, 0 );
 WindowL = aircraft.door.new( "/sim/model/door-positions/WindowL", 2, 0 );
 
 #####################
-# external electrical disconnect when groundspeed higher than 0.1ktn (replace later with distance less than 0.01...)
+# Adjust properties when in motion
+# - external electrical disconnect when groundspeed higher than 0.1ktn (replace later with distance less than 0.01...)
+# - remove external heat
+# - tear tiedowns when significantly off ground
 ad = func {
-GROUNDSPEED = getprop("/velocities/groundspeed-kt") or 0; 
+    GROUNDSPEED = getprop("/velocities/groundspeed-kt") or 0; 
+    AGL         = getprop("/position/altitude-agl-ft")  or 0;
 
- if (GROUNDSPEED > 0.1) {
- setprop("/controls/electric/external-power", "false");
-  setprop("/controls/electric/TEST", "true");
- }
-   settimer(ad, 0.1);   
+    if (GROUNDSPEED > 0.1) {
+        setprop("/controls/electric/external-power", "false");
+        setprop("/engines/engine/external-heat/enabled", "false");
+    }
+    
+    if (AGL > 10) {
+        setprop("/sim/model/c182s/securing/tiedownT-visible", 0);
+        setprop("/sim/model/c182s/securing/tiedownL-visible", 0);
+        setprop("/sim/model/c182s/securing/tiedownR-visible", 0);
+    }
+    
+    settimer(ad, 0.1);   
 }
 init = func {
    settimer(ad, 0.0);
@@ -431,15 +478,248 @@ var thunder = func (name) {
 # Engine coughing sound
 ############################################
 
-setlistener("/engines/active-engine/killed", func (node) {
-    if (node.getValue() and getprop("/engines/active-engine/running")) {
+# Play coughing sound when engine was killed
+setlistener("/engines/engine[0]/killed", func (node) {
+    if (node.getValue() and getprop("/fdm/jsbsim/propulsion/engine/set-running")) {
         click("coughing-engine-sound", 0.7, 0);
     };
 });
 
 
 
+##########################################
+# Thunder sound
+##########################################
 setlistener("/sim/signals/fdm-initialized", func {   
     # Listening for lightning strikes
     setlistener("/environment/lightning/lightning-pos-y", thunder);
+});
+
+
+##########################################
+# Preflight control surface check: left aileron
+##########################################
+var control_surface_check_left_aileron = func {
+    var auto_coordination = getprop("/controls/flight/auto-coordination");
+    setprop("/controls/flight/auto-coordination", 0);
+    interpolate("/controls/flight/aileron", 1.0, 0.5, -1.0, 1.0, 0.0, 0.5);
+    settimer(func(){
+        setprop("/controls/flight/auto-coordination", auto_coordination);
+    }, 2.0);
+};
+
+##########################################
+# Preflight control surface check: right aileron
+##########################################
+var control_surface_check_right_aileron = func {
+    var auto_coordination = getprop("/controls/flight/auto-coordination");
+    setprop("/controls/flight/auto-coordination", 0);
+    interpolate("/controls/flight/aileron", -1.0, 0.5, 1.0, 1.0, 0.0, 0.5);
+    settimer(func(){
+        setprop("/controls/flight/auto-coordination", auto_coordination);
+    }, 2.0);
+};
+
+##########################################
+# Preflight control surface check: elevator
+##########################################
+var control_surface_check_elevator = func {
+    interpolate("/controls/flight/elevator", 1.0, 0.8, -1.0, 1.6, 0.0, 0.8);
+};
+
+##########################################
+# Preflight control surface check: rudder
+##########################################
+var control_surface_check_rudder = func {
+    interpolate("/controls/flight/rudder", -1.0, 0.8, 1.0, 1.6, 0.0, 0.8);
+};
+
+
+##########################################
+# REPAIR DAMAGE
+##########################################
+var repair_damage = func() {
+    print("Repairing damage...");
+    setprop("/engines/engine[0]/kill-engine", 0.0);
+    setprop("/engines/engine[0]/crashed", 0.0);
+    electrical.reset_battery_and_circuit_breakers();
+};
+
+
+
+###########################################
+# FOG AND FROST stuff
+###########################################
+
+var update_cabintemp_humidity_text = func {
+    # Sets a verbally text based on temperature.
+    # TODO: should be enhanced to perceived temperature some time because humidity plays a role in the perception of temperatue
+    var txtp = "/fdm/jsbsim/heat/cabin-temperature-text";
+    var temp = getprop("/fdm/jsbsim/heat/cabin-air-temp-degc") or 0;
+
+    if (temp < 0) {           setprop(txtp, "My fingers are freezing");
+    } else if (temp <= 10) {  setprop(txtp, "A little bit fresh here");
+    } else if (temp <= 18) {  setprop(txtp, "A little too cold here for my taste");
+    } else if (temp <= 25) {  setprop(txtp, "I feel comfortably warm now");
+    } else if (temp <= 30) {  setprop(txtp, "It is getting hot in here");
+    } else {                  setprop(txtp, "Uh, are we taking a sauna in here?");
+    }
+    
+    # Sets a verbally text based on humidity.
+    var txth = "/fdm/jsbsim/heat/cabin-humidity-text";
+    var hum  = getprop("/fdm/jsbsim/heat/cabin-relative-humidity") or 0;
+
+    if (hum < 40) {           setprop(txth, "The Air feels very dry.");
+    } else if (hum <= 70) {   setprop(txth, "The Air feels comfortable.");
+    } else {                  setprop(txth, "The Air feels very dampy.");
+    }
+};
+var cabin_temp_updateloop = maketimer(15.0, update_cabintemp_humidity_text); # update text all 15secs at most
+
+var lastTemperaturePrinted = -100; # to prevent spam with outside-spec loop; but always print the first time
+var print_cabintemp_text = func {
+    # Log changed temperature feelings
+    if (getprop("/sim/model/c182s/enable-fog-frost")) {
+        var temp      = getprop("/fdm/jsbsim/heat/cabin-air-temp-degc") or 0;
+        var temp_txt  = getprop("/fdm/jsbsim/heat/cabin-temperature-text");
+        if (temp_txt) {
+            var txt       = "Cabin temperature: " ~ temp_txt;
+            if (temp < 0) {           logger.screen.red(txt);
+            } else if (temp <= 10) {  logger.screen.red(txt);
+            } else if (temp <= 18) {  logger.screen.white(txt);
+            } else if (temp <= 25) {  logger.screen.green(txt);
+            } else if (temp <= 30) {  logger.screen.white(txt);
+            } else {                  logger.screen.red(txt);
+            }
+            
+            lastTemperaturePrinted = getprop("/sim/time/elapsed-sec");
+        }
+    }
+};
+setlistener("/fdm/jsbsim/heat/cabin-temperature-text", print_cabintemp_text, 1, 0);
+
+var cabin_temp_outsideSpecComplainLoop = maketimer(30.0, func () {
+    # Log repeatedly when temperature is way outside the comfort zone and needs attention
+    if (getprop("/sim/model/c182s/enable-fog-frost")) {
+        var temp = getprop("/fdm/jsbsim/heat/cabin-air-temp-degc") or 0;
+        if (temp <= 18 or temp > 30) {
+            if (getprop("/sim/time/elapsed-sec") >= lastTemperaturePrinted + 5) {  #to avoid spam conflict with normal loop
+                print_cabintemp_text();
+            }
+        }
+    }
+});
+
+# Deactivade because humidity sensing is not precise/notable to humans (see: https://github.com/HHS81/c182s/pull/228#issuecomment-354659510 )
+#var lastHumidityPrinted = -100; # to prevent spam with outside-spec loop; but always print the first time
+#var print_cabinhumidity_text = func {
+#    # Log changed temperature feelings
+#    if (getprop("/sim/model/c182s/enable-fog-frost")) {
+#        var hum     = getprop("/fdm/jsbsim/heat/cabin-relative-humidity") or 0;
+#        var hum_txt = getprop("/fdm/jsbsim/heat/cabin-humidity-text") or 0;
+#        var txt     = "Cabin humidity: " ~ hum_txt;
+#        if (hum_txt) {
+#            if (hum < 40) {          logger.screen.red(txt);
+#            } else if (hum <= 70) {  logger.screen.white(txt);
+#            } else {                 logger.screen.red(txt);
+#            }
+#            
+#            lastHumidityPrinted = getprop("/sim/time/elapsed-sec");
+#        }
+#    }
+#};
+#setlistener("/fdm/jsbsim/heat/cabin-humidity-text", print_cabinhumidity_text, 1, 0);
+#
+#var cabin_hum_outsideSpecComplainLoop = maketimer(30.0, func () {
+#    # Log repeatedly when temperature is way outside the comfort zone and needs attention
+#    if (getprop("/sim/model/c182s/enable-fog-frost")) {
+#        var hum = getprop("/fdm/jsbsim/heat/cabin-relative-humidity") or 0;
+#        if (hum >70) {
+#            if (getprop("/sim/time/elapsed-sec") >= lastHumidityPrinted + 5) {  #to avoid spam conflict with normal loop
+#                print_cabinhumidity_text();
+#            }
+#        }
+#    }
+#});
+
+# Init cabin_temp core loops 10s after sim start
+settimer(func(){
+    cabin_temp_updateloop.start();
+    cabin_temp_outsideSpecComplainLoop.start();
+#    cabin_hum_outsideSpecComplainLoop.start();
+}, 2.0);
+
+setlistener("sim/current-view/internal", func (node) {
+    #log when view switches to "internal"
+    if (node.getValue()) {
+        if (getprop("/sim/time/elapsed-sec") >= lastTemperaturePrinted + 5) {  #to avoid spam conflict with normal loop
+            print_cabintemp_text();
+        }
+#        if (getprop("/sim/time/elapsed-sec") >= lastHumidityPrinted + 5) {  #to avoid spam conflict with normal loop
+#            print_cabinhumidity_text();
+#        }
+    }
+}, 1, 0);
+
+var log_fog_frost = func {
+    # log that frost/fog appeared and what to do against it
+    if (getprop("/sim/model/c182s/enable-fog-frost")) {
+        logger.screen.white("Wait until fog/frost clears up or engage defroster or decrease cabin air temperature");
+    }
+};
+
+var fog_frost_timer = maketimer(30.0, log_fog_frost); # check fog/frost every 30s
+
+setlistener("/sim/model/c182s/fog-or-frost-increasing", func (node) {
+    #log when frost/fog is here
+    if (node.getValue()) {
+        log_fog_frost();
+        fog_frost_timer.start();
+    }
+    else {
+        fog_frost_timer.stop();
+    }
+}, 1, 0);
+
+
+
+
+###########
+# INIT of Aircraft
+# (states are initialized in separate nasal script!)
+###########
+
+setlistener("/sim/signals/fdm-initialized", func {
+    # Fuel contamination
+    init_fuel_contamination();
+    
+    
+    # Reapply tiedowns/chocks to current position in case they
+    # were engaged at startup (this avoids the weird aircraft dance)
+    # note: this is a little hacky and probably should be solved cleanly!
+    if (getprop("/sim/model/c182s/securing/tiedownL-visible")) {
+        setprop("/sim/model/c182s/securing/tiedownL-visible", 0);
+        settimer(func(){ setprop("/sim/model/c182s/securing/tiedownL-visible", 1);}, 0.25);
+    }
+    if (getprop("/sim/model/c182s/securing/tiedownR-visible")) {
+        setprop("/sim/model/c182s/securing/tiedownR-visible", 0);
+        settimer(func(){ setprop("/sim/model/c182s/securing/tiedownR-visible", 1);}, 0.25);
+    }
+    if (getprop("/sim/model/c182s/securing/tiedownT-visible")) {
+        setprop("/sim/model/c182s/securing/tiedownT-visible", 0);
+        settimer(func(){ setprop("/sim/model/c182s/securing/tiedownT-visible", 1);}, 0.25);
+    }
+    if (getprop("/sim/chocks001/enable")) {
+        setprop("/sim/chocks001/enable", 0);
+        settimer(func(){ setprop("/sim/chocks001/enable", 1);}, 0.25);
+    }
+    if (getprop("/sim/chocks002/enable")) {
+        setprop("/sim/chocks002/enable", 0);
+        settimer(func(){ setprop("/sim/chocks002/enable", 1);}, 0.25);
+    }
+    if (getprop("/sim/chocks003/enable")) {
+        setprop("/sim/chocks003/enable", 0);
+        settimer(func(){ setprop("/sim/chocks003/enable", 1);}, 0.25);
+    }
+    
 });

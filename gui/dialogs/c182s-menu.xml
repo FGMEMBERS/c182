@@ -44,13 +44,22 @@
 	    
 
 
-            <!--<item>
+            <item>
                 <label>Registration</label>
                 <binding>
                     <command>dialog-show</command>
                     <dialog-name>registration-dialog</dialog-name>
                 </binding>
             </item>
+
+	    <item>
+                <label>Fuel management</label>
+                <binding>
+                    <command>dialog-show</command>
+                    <dialog-name>fuelmgmt-dialog</dialog-name>
+                </binding>
+            </item>
+
 
             <item>
                 <label>Flashlight</label>
@@ -62,12 +71,12 @@
 
 
             <item>
-                <label>Autostart</label>
+                <label>Auto Startup/Shutdown</label>
                 <binding>
                     <command>nasal</command>
                     <script>c182s.autostart()</script>
                 </binding>
-            </item>-->
+            </item>
         </menu>
 
     </default>

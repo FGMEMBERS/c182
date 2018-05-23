@@ -127,7 +127,7 @@
         </map>
 
     <livery>
-      <file type="string">Default</file>
+      <file type="string">default</file>
       <index type="int">0</index>
     </livery>
     

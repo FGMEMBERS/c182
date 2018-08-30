@@ -360,6 +360,7 @@ BaggageDoor = aircraft.door.new( "/sim/model/door-positions/BaggageDoor", 2, 0 )
 WindowR = aircraft.door.new( "/sim/model/door-positions/WindowR", 2, 0 );
 WindowL = aircraft.door.new( "/sim/model/door-positions/WindowL", 2, 0 );
 
+
 #####################
 # Adjust properties when in motion
 # - external electrical disconnect when groundspeed higher than 0.1ktn (replace later with distance less than 0.01...)
@@ -540,9 +541,13 @@ var control_surface_check_rudder = func {
 ##########################################
 var repair_damage = func() {
     print("Repairing damage...");
+    setprop("/fdm/jsbsim/damage/repairing", 1);
+    
     setprop("/engines/engine[0]/kill-engine", 0.0);
     setprop("/engines/engine[0]/crashed", 0.0);
     electrical.reset_battery_and_circuit_breakers();
+    
+    settimer(func(){ setprop("/fdm/jsbsim/damage/repairing", 0); }, 1.0);
 };
 
 

@@ -690,7 +690,7 @@
                 </domain>
                 <range>
                     <!-- Defines cooling airflow with min=closed/max=open cowl flaps -->
-                    <min>0.35</min>
+                    <min>0.48</min>
                     <max>0.80</max>
                 </range>
                 <output>propulsion/engine[0]/cooling-factor-cowlflaps</output>
@@ -797,6 +797,24 @@
             </product>
 <value>1.0</value>
         </function>
+	
+	<function name="aero/function/vel-propwash-fps">
+            <description> propeller induced velocity </description>
+            <sum>
+                <property>propulsion/engine/prop-induced-velocity_fps</property>
+             </sum>
+        </function>
+
+        <function name="aero/function/qbar-propwash-psf">
+            <description> q bar due to the propeller induced velocity </description>
+            <product>
+                <property>aero/function/vel-propwash-fps</property>
+                <property>aero/function/vel-propwash-fps</property>
+                <property>atmosphere/rho-slugs_ft3</property>
+                <value>0.5</value>
+            </product>
+        </function>
+	
 
         <function name="aero/function/velocity-induced-fps">
             <description> velocity including the propulsion induced velocity.</description>
@@ -1006,6 +1024,52 @@
                     <property>aero/function/kCLge</property>
                         <property>propulsion/engine[0]/cowl-flaps-norm</property>
                     <value>0.028</value>
+                </product>
+            </function>
+            
+            <function name="aero/coefficient/CDdoorL">
+                <description>Drag_due_to_door_left</description>
+                <product>
+                    <property>aero/qbar-psf</property>
+                    <property>metrics/Sw-sqft</property>
+                    <property>/sim/model/door-positions/DoorL/position-norm</property>
+                    <value>0.0150</value>
+                </product>
+            </function>
+            <function name="aero/coefficient/CDdoorR">
+                <description>Drag_due_to_door_right</description>
+                <product>
+                    <property>aero/qbar-psf</property>
+                    <property>metrics/Sw-sqft</property>
+                    <property>/sim/model/door-positions/DoorR/position-norm</property>
+                    <value>0.0150</value>
+                </product>
+            </function>
+            <function name="aero/coefficient/CDbaggagedoor">
+                <description>Drag_due_to_door_left</description>
+                <product>
+                    <property>aero/qbar-psf</property>
+                    <property>metrics/Sw-sqft</property>
+                    <property>/sim/model/door-positions/BaggageDoor/position-norm</property>
+                    <value>0.0150</value>
+                </product>
+            </function>
+            <function name="aero/coefficient/CDwindow-l">
+                <description>Drag_due_to_window_left</description>
+                <product>
+                    <property>aero/qbar-psf</property>
+                    <property>metrics/Sw-sqft</property>
+                    <property>/sim/model/door-positions/WindowL/position-norm</property>
+                    <value>0.0020</value>
+                </product>
+            </function>
+            <function name="aero/coefficient/CDwindow-r">
+                <description>Drag_due_to_window_right</description>
+                <product>
+                    <property>aero/qbar-psf</property>
+                    <property>metrics/Sw-sqft</property>
+                    <property>/sim/model/door-positions/WindowR/position-norm</property>
+                    <value>0.0020</value>
                 </product>
             </function>
 
@@ -1374,7 +1438,7 @@
                 </product>
             </function>
 	    
-<function name="aero/coefficient/Cnp">
+	<function name="aero/coefficient/Cnp">
                 <description>yawing moment due to roll rate</description>
                 <product>
                     <property>aero/qbar-psf</property>
@@ -1392,7 +1456,15 @@
                 </product>
             </function>
 	    
-
+	<function name="aero/coefficient/Cnspw">
+                <description>Yaw_moment_due_to_spiraling_propwash</description>
+                <product>
+                    <property>aero/function/qbar-propwash-psf</property>
+                    <property>metrics/Sw-sqft</property>
+                    <property>metrics/bw-ft</property>
+                    <value>-0.05</value>
+                </product>
+            </function> 
 
             <function name="aero/coefficient/Cnr">
                 <description>Yaw_moment_due_to_yaw_rate</description>

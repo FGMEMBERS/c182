@@ -26,9 +26,20 @@
    </load>
 </nasal>
 
+<!-- Engine smoke -->
+<model>
+  <path>Aircraft/c182s/Models/Effects/c182_enginesmoke.xml</path>
+  <name>enginesmoke</name>
+  <offsets>
+    <x-m>-0.60</x-m>
+    <y-m> 0.00</y-m>
+    <z-m>-0.10</z-m>
+  </offsets>
+</model>
+
 <effect>
     <inherits-from>Aircraft/c182s/Models/Effects/c182sreflect-uber</inherits-from>
-   <object-name>Fuselage</object-name><!-- model obejcts parented in Blender - gives faster livery loading-->
+    <object-name>Fuselage</object-name><!-- model obejcts parented in Blender - gives faster livery loading-->
 <object-name>WinterKit</object-name>
    <!--<object-name>Spinner</object-name>
    <object-name>WheelFairingNose</object-name>
@@ -58,7 +69,7 @@
  </effect>
  
   <effect>
-       <inherits-from>Aircraft/c182s/Models/Effects/c182sreflectglas-uber</inherits-from>
+    <inherits-from>Aircraft/c182s/Models/Effects/c182sreflectglas-uber</inherits-from>
     <object-name>Windscreen</object-name>
     <object-name>Window.L</object-name>
     <object-name>Window.R</object-name>
@@ -81,7 +92,8 @@
    </effect>
    
 <effect>
-	<inherits-from>Aircraft/c182s/Models/Effects/c182sreflect-uber</inherits-from>
+    <inherits-from>Aircraft/c182s/Models/Effects/c182sreflect-uber</inherits-from>
+    
 	<parameters>
 			<reflection-correction type="float">1.0</reflection-correction>
 			<reflection-dynamic type="int">1</reflection-dynamic>
@@ -695,7 +707,7 @@
    <object-name>WindowFrame.L</object-name>
 <object-name>Window.L</object-name>
 <object-name>Window.L.001</object-name>
-   <property>sim/model/door-positions/DoorL/position-norm</property>
+   <property>sim/model/door-positions/DoorL/position-norm-effective</property>
    <interpolation>
      <entry>
        <ind>0.0</ind>
@@ -743,7 +755,7 @@
    <object-name>WindowFrame.R</object-name>
 <object-name>Window.R</object-name>
 <object-name>Window.R.001</object-name>
-   <property>sim/model/door-positions/DoorR/position-norm</property>
+   <property>sim/model/door-positions/DoorR/position-norm-effective</property>
    <interpolation>
      <entry>
        <ind>0.0</ind>
@@ -1084,7 +1096,7 @@
  <animation>
    <type>rotate</type>
    <object-name>BaggageDoor</object-name>
-   <property>sim/model/door-positions/BaggageDoor/position-norm</property>
+   <property>sim/model/door-positions/BaggageDoor/position-norm-effective</property>
    <interpolation>
      <entry>
        <ind>0.0</ind>

@@ -360,7 +360,6 @@ BaggageDoor = aircraft.door.new( "/sim/model/door-positions/BaggageDoor", 2, 0 )
 WindowR = aircraft.door.new( "/sim/model/door-positions/WindowR", 2, 0 );
 WindowL = aircraft.door.new( "/sim/model/door-positions/WindowL", 2, 0 );
 
-
 #####################
 # Adjust properties when in motion
 # - external electrical disconnect when groundspeed higher than 0.1ktn (replace later with distance less than 0.01...)
@@ -372,7 +371,7 @@ ad = func {
 
     if (GROUNDSPEED > 0.1) {
         setprop("/controls/electric/external-power", "false");
-        setprop("/engines/engine/external-heat/enabled", "false");
+        #setprop("/engines/engine/external-heat/enabled", "false"); #not needed, as you can't start the engine with preheater enabled, nor enable the preheater anyway when engine running, or aircraft moving
     }
     
     if (AGL > 10) {

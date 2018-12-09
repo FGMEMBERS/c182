@@ -75,6 +75,8 @@
     </electrical>
   </systems>
   
+
+  
   <!-- Aircraft states -->
   <start-state type="string">auto</start-state>
   <start-state-internal>
@@ -119,7 +121,39 @@
    <path archive="y">Aircraft/c182s/Models/c182s.xml</path>
     <hide-yoke>false</hide-yoke>
 
-  
+     <icing>
+        <iceable>
+          <name>Wing</name>
+          <sensitivity type="double">1.0</sensitivity>
+          <output-property>/fdm/jsbsim/ice/wing</output-property>
+        </iceable>
+        <iceable>
+          <name>Stabilizer</name>
+          <sensitivity type="double">1.0</sensitivity>
+          <output-property>/fdm/jsbsim/ice/stabilizer</output-property>
+        </iceable>
+        <iceable>
+          <name>Propeller</name>
+          <sensitivity type="double">0.5</sensitivity>
+          <output-property>/fdm/jsbsim/ice/propeller</output-property>
+        </iceable>
+        <iceable>
+          <name>Windshield</name>
+          <sensitivity type="double">0.5</sensitivity>
+          <!-- not relevant for fdm, ignore output-property -->
+        </iceable>
+        <iceable>
+          <name>Fuselage</name>
+          <sensitivity type="double">0.3</sensitivity>
+          <output-property>/fdm/jsbsim/ice/fuselage</output-property>
+        </iceable>
+        <iceable>
+          <name>Pitot tube</name>
+          <sensitivity type="double">1</sensitivity>
+          <salvage-control>/systems/pitot/salvage</salvage-control>
+          <output-property>/systems/pitot/icing</output-property>
+        </iceable>
+      </icing>
     
 <!-- An exit for the walker -->
         <map>
@@ -130,8 +164,7 @@
         </map>
 
     <livery>
-      <file type="string">liveries/default.png</file>
-      <index type="int">0</index>
+        <name type="string">default</name>
     </livery>
     
   <c182s>
@@ -172,6 +205,7 @@
 
 <procedural-lights type="bool">true</procedural-lights>
 <enable-fog-frost type="bool">false</enable-fog-frost>
+<enable-fog-frost-msgs type="bool">true</enable-fog-frost-msgs>
 
 
 	<material>
@@ -532,6 +566,8 @@
     <desc>Engine Starter</desc>
    </key>
   </help>
+  
+
 
         <menubar include="gui/dialogs/c182s-menu.xml"/>
         
@@ -560,6 +596,7 @@
             
             <path>/sim/time/hobbs/engine</path>
             <path>/sim/model/c182s/enable-fog-frost</path>
+            <path>/sim/model/c182s/enable-fog-frost-msgs</path>
             <path>/engines/engine/complex-engine-procedures</path>
             <path>/engines/engine/allow-fuel-contamination</path>
             <path>/engines/engine/allow-oil-management</path>
@@ -667,7 +704,8 @@
             <path>/instrumentation/transponder/factory-vfr-code</path>
             <path>/engines/engine[0]/egt-bug-norm</path>
             
-            <path>/controls/engines/engine[0]/magnetos</path>
+            <!-- now calculated in engine.nas! <path>/controls/engines/engine[0]/magnetos</path> -->
+            <path>/controls/switches/magnetos</path>
             <path>/controls/engines/engine[0]/master-bat</path>
             <path>/controls/engines/engine[0]/master-alt</path>
             <path>/controls/switches/AVMBus1</path>
@@ -708,6 +746,11 @@
             <path>/sim/model/c182s/securing/pitot-cover-visible</path>
             <path>/controls/SunVisor[0]/position-deg</path>
             <path>/controls/SunVisor[1]/position-deg</path>
+            <path>/sim/model/door-positions/DoorL/position-norm</path>
+            <path>/sim/model/door-positions/DoorR/position-norm</path>
+            <path>/sim/model/door-positions/BaggageDoor/position-norm</path>
+            <path>/sim/model/door-positions/WindowL/position-norm</path>
+            <path>/sim/model/door-positions/WindowR/position-norm</path>
         
             <path>/controls/circuit-breakers/Flap</path>
             <path>/controls/circuit-breakers/Inst</path>
@@ -724,12 +767,33 @@
             <path>/controls/circuit-breakers/Transponder</path>
             <path>/controls/circuit-breakers/ADF</path>
             <path>/controls/circuit-breakers/AutoPilot</path>
+            
+            <path>/sim/failure-manager/display-on-screen</path>
+            <path>/sim/failure-manager/restore-on-start</path>
         </aircraft-data>
+        
+     <flight-recorder include="Systems/flight-recorder/flight-recorder.xml"/>
 
  </sim>
  
-  <property>/instrumentation/airspeed-indicator/indicated-speed-kt</property>
- 
+ <property>/instrumentation/airspeed-indicator/indicated-speed-kt</property>
+  <instruments>
+    <airspeed-indicator>
+        <indicated-speed-kt type="float">0</indicated-speed-kt>
+    </airspeed-indicator>
+          
+    <fuelIndicator n="0">  <serviceable type="bool">true</serviceable>  </fuelIndicator>
+    <fuelIndicator n="1">  <serviceable type="bool">true</serviceable>  </fuelIndicator>
+    <egt>  <serviceable type="bool">true</serviceable>  </egt>
+    <cht>  <serviceable type="bool">true</serviceable>  </cht>
+    <oil-temp>  <serviceable type="bool">true</serviceable>  </oil-temp>
+    <oil-press>  <serviceable type="bool">true</serviceable>  </oil-press>
+    <!--<vac>  <serviceable type="bool">true</serviceable>  </vac>  IMPLEMENT ME -->
+    <!--<amp>  <serviceable type="bool">true</serviceable>  </amp>  IMPLEMENT ME -->
+    <fuel-flow>  <serviceable type="bool">true</serviceable>  </fuel-flow>
+    <!--<manfold-press> <serviceable type="bool">true</serviceable> </manfold-press> IMPLEMENT ME -->
+  </instruments>
+  
    <consumables>
     <fuel>
       <tank n="0">
@@ -815,6 +879,7 @@
    <kt-76c type="double">0</kt-76c>
    <kn-62a type="double">0</kn-62a>
    <fuel_tank_selector type="double">2</fuel_tank_selector> <!-- 0=off, 1=right, 2=both, 3=left -->
+   <magnetos type="int">3</magnetos>
   </switches>
   <circuit-breakers>
     <Flap type="bool">1</Flap>
@@ -833,6 +898,10 @@
     <ADF type="bool">1</ADF>
     <AutoPilot type="bool">1</AutoPilot>
   </circuit-breakers>
+  <stall-horn>
+      <serviceable type="bool">1</serviceable>
+      <test type="bool">0</test>
+  </stall-horn>
   </controls>
 
  
@@ -841,6 +910,7 @@
    <settings>
     <auto-pitch-trim type="bool">true</auto-pitch-trim>
    </settings>
+   <serviceable type="bool">true</serviceable>
   </KAP140>
  </autopilot>
  
@@ -1024,9 +1094,18 @@
     ]]>
 </script>
 </kap140>
+
     <failures> 
     <file>Aircraft/Generic/limits.nas</file>
+    <file>Aircraft/c182s/Nasal/custom-failures.nas</file>
   </failures>
+  
+     
+<icing>
+      <file>Aircraft/c182s/Nasal/icing.nas</file>
+      <file>Aircraft/c182s/Nasal/PitotIcing.nas</file>
+</icing> 
+  
  </nasal>
 
  <!-- ================ map keyboard ================ -->
@@ -1043,6 +1122,37 @@
           <property>sim/model/hide-yoke</property>
         </binding>
       </key>    
+      
+      
+      <!-- overwriting { and } default aliases -->
+      <key n="123">
+        <name>{</name>
+        <desc>Decrease Magneto on Selected Engine</desc>
+        <binding>
+            <command>nasal</command>
+            <script>c182s.stepMagnetos(-1)</script>
+        </binding>
+        <mod-up>
+            <binding>
+                <command>nasal</command>
+                <script>c182s.stepMagnetos(0)</script>
+            </binding>
+        </mod-up>
+      </key>
+      <key n="125">
+        <name>}</name>
+        <desc>Increase Magneto on Selected Engine</desc>
+        <binding>
+            <command>nasal</command>
+                <script>c182s.stepMagnetos(1)</script>
+        </binding>
+        <mod-up>
+            <binding>
+                <command>nasal</command>
+                <script>c182s.stepMagnetos(0)</script>
+            </binding>
+        </mod-up>
+      </key>
 
     </keyboard>
     </input>
